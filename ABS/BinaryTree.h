@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <stdexcept>
 #include <functional>
 #include <stack>
@@ -190,10 +190,10 @@ public:
 				}
 				else
 				{
-					stack.pop();
-					lastNode = topNode;
-					delete topNode;
-					currentNode = nullptr;
+					stack.pop();			///
+					lastNode = topNode;		/// TOTO MOZNO NAHRADIT LEN ZA DALSIU METODU - rovnako aj funkcia vyssie - zbaviť sa duplicity
+					delete topNode;			///
+					currentNode = nullptr;	///
 				}
 			}
 		}
