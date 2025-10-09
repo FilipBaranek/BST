@@ -13,6 +13,77 @@ private:
 	Node<T>* m_root;
 	size_t m_depth;
 
+	Node<T>* findNode(IComparable* item)
+	{
+		if (m_root == nullptr)
+		{
+			return nullptr;
+		}
+
+		Node<T>* currentNode = m_root;
+		while (true)
+		{
+			int cmp = currentNode->getData()->compare(item);
+
+			if (cmp == 0)
+			{
+				return currentNode;
+			}
+			else if (cmp == -1)
+			{
+				if (currentNode->leftChild() == nullptr)
+				{
+					return nullptr;
+				}
+				currentNode = currentNode->leftChild();
+			}
+			else if (cmp == 1)
+			{
+				if (currentNode->rightChild() == nullptr)
+				{
+					return nullptr;
+				}
+				currentNode = currentNode->rightChild();
+			}
+		}
+	}
+
+	void postOrderTraversal(std::function<void(Node<T>*)> process)
+	{
+		if (m_root == nullptr)
+		{
+			throw std::runtime_error("Trying to process empty tree");
+		}
+
+		std::stack<Node<T>*> stack;
+		Node<T>* lastNode = nullptr;
+		Node<T>* currentNode = m_root;
+
+		while (!stack.empty() || currentNode != nullptr)
+		{
+			if (currentNode != nullptr)
+			{
+				stack.push(currentNode);
+				currentNode = currentNode->leftChild();
+			}
+			else
+			{
+				Node<T>* topNode = stack.top();
+
+				if (topNode->rightChild() != nullptr && lastNode != topNode->rightChild())
+				{
+					currentNode = topNode->rightChild();
+				}
+				else
+				{
+					process(topNode);
+					lastNode = topNode;
+					stack.pop();
+				}
+			}
+		}
+	}
+
 public:
 	BinaryTree() = default;
 
@@ -55,37 +126,18 @@ public:
 
 	IComparable* find(IComparable* item)
 	{
-		if (m_root == nullptr)
+		return findNode(item)->getData();
+	}
+
+	void remove(IComparable* item)
+	{
+		Node<T>* currentNode = findNode(item);
+		if (currentNode == nullptr)
 		{
-			return nullptr;
+			throw std::runtime_error("Item is not in the tree");
 		}
 
-		Node<T>* currentNode = m_root;
-		while (true)
-		{
-			int cmp = currentNode->getData()->compare(item);
-
-			if (cmp == 0)
-			{
-				return currentNode->getData();
-			}
-			else if (cmp == -1)
-			{
-				if (currentNode->leftChild() == nullptr)
-				{
-					return nullptr;
-				}
-				currentNode = currentNode->leftChild();
-			}
-			else if (cmp == 1)
-			{
-				if (currentNode->rightChild() == nullptr)
-				{
-					return nullptr;
-				}
-				currentNode = currentNode->rightChild();
-			}
-		}
+		/////////////////////////TODO//////////////////////////
 	}
 
 	void processInOrder(std::function<void(IComparable*)> process)
@@ -128,75 +180,16 @@ public:
 
 	void processPostOrder(std::function<void(IComparable*)> process)
 	{
-		if (m_root == nullptr)
-		{
-			throw std::runtime_error("Trying to process empty tree");
-		}
-
-		std::stack<Node<T>*> stack;
-		Node<T>* lastNode = nullptr;
-		Node<T>* currentNode = m_root;
-
-		while (!stack.empty() || currentNode != nullptr)
-		{
-			if (currentNode != nullptr)
-			{
-				stack.push(currentNode);
-				currentNode = currentNode->leftChild();
-			}
-			else
-			{
-				Node<T>* topNode = stack.top();
-
-				if (topNode->rightChild() != nullptr && lastNode != topNode->rightChild())
-				{
-					currentNode = topNode->rightChild();
-				}
-				else
-				{
-					process(topNode->getData());
-					lastNode = stack.top();
-					stack.pop();
-				}
-			}
-		}
+		postOrderTraversal([&](Node<T>* node) {
+			process(node->getData());
+		});
 	}
 
 	void clear()
 	{
-		if (m_root == nullptr)
-		{
-			return;
-		}
-
-		std::stack<Node<T>*> stack;
-		Node<T>* lastNode = nullptr;
-		Node<T>* currentNode = m_root;
-
-		while (!stack.empty() || currentNode != nullptr)
-		{
-			if (currentNode != nullptr)
-			{
-				stack.push(currentNode);
-				currentNode = currentNode->leftChild();
-			}
-			else
-			{
-				Node<T>* topNode = stack.top();
-
-				if (topNode->rightChild() != nullptr && lastNode != topNode->rightChild())
-				{
-					currentNode = topNode->rightChild();
-				}
-				else
-				{
-					stack.pop();			///
-					lastNode = topNode;		/// TOTO MOZNO NAHRADIT LEN ZA DALSIU METODU - rovnako aj funkcia vyssie - zbaviť sa duplicity
-					delete topNode;			///
-					currentNode = nullptr;	///
-				}
-			}
-		}
+		postOrderTraversal([&](Node<T>* node) {
+			delete node;
+		});
 
 		m_root = nullptr;
 		m_depth = 0;

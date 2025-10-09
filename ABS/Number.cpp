@@ -1,24 +1,24 @@
-#include "Wrapper.h"
+#include "Number.h"
 #include <iostream>
 
-Wrapper::Wrapper(int data)
+Number::Number(int data)
 {
 	m_data = data;
 }
 
-int Wrapper::getData()
+int Number::getData()
 {
 	return m_data;
 }
 
-void Wrapper::print()
+void Number::print()
 {
 	std::cout << m_data << "\n";
 }
 
-int Wrapper::compare(IComparable* other) const
+int Number::compare(IComparable* other) const
 {
-	int otherData = ((Wrapper*)other)->getData();
+	int otherData = ((Number*)other)->getData();
 
 	if (m_data == otherData)
 	{
