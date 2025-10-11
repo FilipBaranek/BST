@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <functional>
 #include <stack>
+#include <queue>
 #include "Node.h"
 #include "IComparable.h"
 
@@ -11,9 +12,9 @@ class BinaryTree
 {
 private:
 	Node<T>* m_root;
-	size_t m_depth;
+	unsigned int m_depth;
 
-	Node<T>* findNode(IComparable* item)
+	Node<T>* findNode(T item)
 	{
 		if (m_root == nullptr)
 		{
@@ -87,24 +88,27 @@ private:
 public:
 	BinaryTree() = default;
 
-	void insert(IComparable* data)
+	bool insert(T data)
 	{
 		if (m_root == nullptr)
 		{
 			m_root = new Node<T>(data, nullptr);
-			return;
+			m_depth = 1;
+			return true;
 		}
 
+		int depth = 1;
 		Node<T>* currentNode = m_root;
 		while (true)
 		{
 			int cmp = currentNode->getData()->compare(data);
 			if (cmp == 0)
 			{
-				throw std::runtime_error("Item is already inside the tree");
+				return false;
 			}
 			else if (cmp == -1)
 			{
+				++depth;
 				if (currentNode->leftChild() == nullptr)
 				{
 					currentNode->setLeftChild(new Node<T>(data, currentNode));
@@ -114,6 +118,7 @@ public:
 			}
 			else
 			{
+				++depth;
 				if (currentNode->rightChild() == nullptr)
 				{
 					currentNode->setRightChild(new Node<T>(data, currentNode));
@@ -122,25 +127,71 @@ public:
 				currentNode = currentNode->rightChild();
 			}
 		}
+
+		if (depth > m_depth)
+		{
+			m_depth = depth;
+		}
+
+		return true;
 	}
 
-	IComparable* find(IComparable* item)
+	int depth()
+	{
+		return m_depth;
+	}
+
+	T find(T item)
 	{
 		return findNode(item)->getData();
 	}
 
-	void remove(IComparable* item)
+	T remove(T item)
 	{
 		Node<T>* currentNode = findNode(item);
 		if (currentNode == nullptr)
 		{
-			throw std::runtime_error("Item is not in the tree");
+			return nullptr;
 		}
 
-		/////////////////////////TODO//////////////////////////
+		if (currentNode->leftChild() != nullptr && currentNode->rightChild() != nullptr)
+		{
+			Node<T>* successor = currentNode->rightChild();
+
+			while (successor->leftChild() != nullptr)
+			{
+				successor = successor->leftChild();
+			}
+
+			currentNode->setData(successor->getData());
+			currentNode = successor;
+		}
+
+		Node<T>* child = currentNode->leftChild() != nullptr ? currentNode->leftChild() : currentNode->rightChild();
+		if (child != nullptr)
+		{
+			child->setAncestor(currentNode->getAncestor());
+		}
+
+		if (currentNode->getAncestor() == nullptr)
+		{
+			m_root = child;
+		}
+		else if (currentNode == currentNode->getAncestor()->leftChild())
+		{
+			currentNode->getAncestor()->setLeftChild(child);
+		}
+		else
+		{
+			currentNode->getAncestor()->setRightChild(child);
+		}
+
+		T data = currentNode->getData();
+		delete currentNode;
+		return data;
 	}
 
-	void processInOrder(std::function<void(IComparable*)> process)
+	void processInOrder(std::function<void(T)> process)
 	{
 		if (m_root == nullptr)
 		{
@@ -178,11 +229,67 @@ public:
 		}
 	}
 
-	void processPostOrder(std::function<void(IComparable*)> process)
+	void processPostOrder(std::function<void(T)> process)
 	{
 		postOrderTraversal([&](Node<T>* node) {
 			process(node->getData());
 		});
+	}
+
+	void processPreOrder(std::function<void(T)> process)
+	{
+		if (m_root == nullptr)
+		{
+			throw std::runtime_error("Trying to process empty tree");
+		}
+
+		std::stack<Node<T>*> stack;
+		stack.push(m_root);
+
+		while (!stack.empty())
+		{
+			Node<T>* currentNode = stack.top();
+			stack.pop();
+
+			process(currentNode->getData());
+
+			if (currentNode->rightChild() != nullptr)
+			{
+				stack.push(currentNode->rightChild());
+			}
+			if (currentNode->leftChild() != nullptr)
+			{
+				stack.push(currentNode->leftChild());
+			}
+		}
+	}
+
+	void processLevelOrder(std::function<void(T)> process)
+	{
+		if (m_root == nullptr)
+		{
+			throw std::runtime_error("Trying to process empty tree");
+		}
+
+		std::queue<Node<T>*> queue;
+		queue.push(m_root);
+
+		while (!queue.empty())
+		{
+			Node<T>* currentNode = queue.front();
+			queue.pop();
+
+			process(currentNode->getData());
+
+			if (currentNode->leftChild() != nullptr)
+			{
+				queue.push(currentNode->leftChild());
+			}
+			if (currentNode->rightChild() != nullptr)
+			{
+				queue.push(currentNode->rightChild());
+			}
+		}
 	}
 
 	void clear()

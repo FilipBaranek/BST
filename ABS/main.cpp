@@ -1,7 +1,8 @@
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 #include <iostream>
-#include <unordered_set>
+#include <vector>
+#include <algorithm>
 #include "Number.h"
 #include "BinaryTree.h"
 #include "IComparable.h"
@@ -12,31 +13,49 @@ int main()
 
 	srand(time(nullptr));
 	{
-		std::unordered_set<int> usedNumbers;
-		BinaryTree<IComparable*> bt;
-		
-		while (usedNumbers.size() <= 10000)
+		std::vector<int> numbers;
+		for (int i = 1; i <= 10; ++i)
 		{
-			usedNumbers.insert(rand());
+			numbers.push_back(i);
 		}
-		std::cout << "Numbers were inserted\n";
+		std::random_shuffle(numbers.begin(), numbers.end());
 
-		IComparable* number = new Number(500);
+		std::cout << "Numbers order:\n";
+		for (int i : numbers)
+		{
+			std::cout << i << "\n";
+		}
+
+		BinaryTree<Number*> bt;
+		Number* number = new Number(1651651351);
 		bt.insert(number);
-		for (int i : usedNumbers)
+		for (int i : numbers)
 		{
 			bt.insert(new Number(i));
 		}
+		std::cout << "Numbers were inserted, tree depth is " << bt.depth() << "\n";
 
-		std::cout << "Found item:";
-		((Number*)bt.find(number))->print();			//TOTO ISTO BUDE TREBA PREROBIT LEBO HLADAM KLUC PODLA KLUCA - NEZMYSEL
-		
-		std::cout << "\nItems printed in order:\n";
-		bt.processInOrder([](IComparable* item) {
-			((Number*)item)->print();
+		std::cout << "\nIn order traversal:\n";
+		bt.processInOrder([](Number* item) {
+			item->print();
 		});
-		
-		bt.processPostOrder([](IComparable* item) {
+
+		std::cout << "Found item: ";
+		bt.find(number)->print();
+		bt.remove(number);
+		delete number;
+
+		std::cout << "Pre order traversal:\n";
+		bt.processPreOrder([](Number* item) {
+			item->print();
+		});
+
+		std::cout << "Level order traversal:\n";
+		bt.processLevelOrder([](Number* item) {
+			item->print();
+		});
+
+		bt.processPostOrder([](Number* item) {
 			delete item;
 		});
 	}

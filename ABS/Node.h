@@ -22,6 +22,16 @@ public:
 		m_rightChild = nullptr;
 	}
 
+	void setData(T data)
+	{
+		m_data = data;
+	}
+
+	void setAncestor(Node* ancestor)
+	{
+		m_ancestor = ancestor;
+	}
+
 	void setRightChild(Node* rightChild)
 	{
 		m_rightChild = rightChild;
@@ -35,6 +45,11 @@ public:
 	T getData()
 	{
 		return m_data;
+	}
+
+	Node* getAncestor()
+	{
+		return m_ancestor;
 	}
 
 	Node* leftChild()
