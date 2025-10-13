@@ -3,25 +3,25 @@
 #include <functional>
 #include <stack>
 #include <queue>
-#include "Node.h"
+#include "BSTNode.h"
 #include "IComparable.h"
 
 
 template<typename T>
-class BinaryTree
+class BinarySearchTree
 {
 private:
-	Node<T>* m_root;
+	BSTNode<T>* m_root;
 	unsigned int m_depth;
 
-	Node<T>* findNode(T key)
+	BSTNode<T>* findNode(T key)
 	{
 		if (m_root == nullptr)
 		{
 			return nullptr;
 		}
 
-		Node<T>* currentNode = m_root;
+		BSTNode<T>* currentNode = m_root;
 		while (true)
 		{
 			int cmp = currentNode->getData()->compare(key);
@@ -49,16 +49,38 @@ private:
 		}
 	}
 
-	void postOrderTraversal(std::function<void(Node<T>*)> process)
+	BSTNode<T>* findMinKeyNode(BSTNode<T>* startingNode)
+	{
+		BSTNode<T>* currentNode = startingNode;
+		while (currentNode->leftChild() != nullptr)
+		{
+			currentNode = currentNode->leftChild();
+		}
+
+		return currentNode;
+	}
+
+	BSTNode<T>* findMaxKeyNode(BSTNode<T>* startingNode)
+	{
+		BSTNode<T>* currentNode = startingNode;
+		while (currentNode->rightChild() != nullptr)
+		{
+			currentNode = currentNode->rightChild();
+		}
+
+		return currentNode;
+	}
+
+	void postOrderTraversal(std::function<void(BSTNode<T>*)> process)
 	{
 		if (m_root == nullptr)
 		{
 			throw std::runtime_error("Trying to process empty tree");
 		}
 
-		std::stack<Node<T>*> stack;
-		Node<T>* lastNode = nullptr;
-		Node<T>* currentNode = m_root;
+		std::stack<BSTNode<T>*> stack;
+		BSTNode<T>* lastNode = nullptr;
+		BSTNode<T>* currentNode = m_root;
 
 		while (!stack.empty() || currentNode != nullptr)
 		{
@@ -69,7 +91,7 @@ private:
 			}
 			else
 			{
-				Node<T>* topNode = stack.top();
+				BSTNode<T>* topNode = stack.top();
 
 				if (topNode->rightChild() != nullptr && lastNode != topNode->rightChild())
 				{
@@ -86,19 +108,19 @@ private:
 	}
 
 public:
-	BinaryTree() = default;
+	BinarySearchTree() = default;
 
-	bool insert(T data)
+	virtual bool insert(T data)
 	{
 		if (m_root == nullptr)
 		{
-			m_root = new Node<T>(data, nullptr);
+			m_root = new BSTNode<T>(data, nullptr);
 			m_depth = 1;
 			return true;
 		}
 
 		int depth = 1;
-		Node<T>* currentNode = m_root;
+		BSTNode<T>* currentNode = m_root;
 		while (true)
 		{
 			int cmp = currentNode->getData()->compare(data);
@@ -111,7 +133,7 @@ public:
 				++depth;
 				if (currentNode->leftChild() == nullptr)
 				{
-					currentNode->setLeftChild(new Node<T>(data, currentNode));
+					currentNode->setLeftChild(new BSTNode<T>(data, currentNode));
 					break;
 				}
 				currentNode = currentNode->leftChild();
@@ -121,7 +143,7 @@ public:
 				++depth;
 				if (currentNode->rightChild() == nullptr)
 				{
-					currentNode->setRightChild(new Node<T>(data, currentNode));
+					currentNode->setRightChild(new BSTNode<T>(data, currentNode));
 					break;
 				}
 				currentNode = currentNode->rightChild();
@@ -141,21 +163,31 @@ public:
 		return m_depth;
 	}
 
-	T find(T key)
+	T find(T& key)
 	{
 		return findNode(key)->getData();
 	}
 
-	T remove(T key)
+	T findMinKey()
 	{
-		Node<T>* currentNode = findNode(key);
+		return findMinKeyNode(m_root)->getData();
+	}
+
+	T findMaxKey()
+	{
+		return findMaxKeyNode(m_root)->getData();
+	}
+
+	virtual T remove(T& key)
+	{
+		BSTNode<T>* currentNode = findNode(key);
 		if (currentNode == nullptr)
 		{
 			return nullptr;
 		}
 
 		T data = currentNode->getData();
-		Node<T>* ancestor = currentNode->getAncestor();
+		BSTNode<T>* ancestor = currentNode->getAncestor();
 		int childCount = currentNode->childCount();
 		
 		if (childCount == 0)
@@ -176,7 +208,7 @@ public:
 		}
 		else if (childCount == 1)
 		{
-			Node<T>* child = currentNode->leftChild() != nullptr ? currentNode->leftChild() : currentNode->rightChild(); //Might be intentionaly nullptr if has no child
+			BSTNode<T>* child = currentNode->leftChild() != nullptr ? currentNode->leftChild() : currentNode->rightChild(); //Might be intentionaly nullptr if has no child
 			if (ancestor == nullptr)
 			{
 				m_root = child;
@@ -198,16 +230,10 @@ public:
 		}
 		else
 		{
-			Node<T>* swapNode = currentNode->rightChild();
-			while (swapNode->leftChild() != nullptr)
-			{
-				swapNode = swapNode->leftChild();
-			}
-
+			BSTNode<T>* swapNode = findMinKeyNode(currentNode->rightChild());
 			currentNode->setData(swapNode->getData());
-
-			Node<T>* swapNodeAncestor = swapNode->getAncestor();
-			Node<T>* swapNodeChild = swapNode->rightChild();	//Only possible child
+			BSTNode<T>* swapNodeAncestor = swapNode->getAncestor();
+			BSTNode<T>* swapNodeChild = swapNode->rightChild();	//Only possible child
 
 			if (swapNodeAncestor->leftChild() == swapNode)
 			{
@@ -229,14 +255,6 @@ public:
 		return data;
 	}
 
-	/*
-	T remove(T&& key)
-	{
-		remove(key);
-		delete key;
-	}
-	*/
-
 	void processInOrder(std::function<void(T)> process)
 	{
 		if (m_root == nullptr)
@@ -244,7 +262,7 @@ public:
 			throw std::runtime_error("Trying to process empty tree");
 		}
 
-		Node<T>* currentNode = m_root;
+		BSTNode<T>* currentNode = m_root;
 		while (currentNode != nullptr)
 		{
 			if (currentNode->leftChild() == nullptr)
@@ -254,7 +272,7 @@ public:
 			}
 			else
 			{
-				Node<T>* predecessor = currentNode->leftChild();
+				BSTNode<T>* predecessor = currentNode->leftChild();
 				while (predecessor->rightChild() != nullptr && predecessor->rightChild() != currentNode)
 				{
 					predecessor = predecessor->rightChild();
@@ -277,7 +295,7 @@ public:
 
 	void processPostOrder(std::function<void(T)> process)
 	{
-		postOrderTraversal([&](Node<T>* node) {
+		postOrderTraversal([&](BSTNode<T>* node) {
 			process(node->getData());
 		});
 	}
@@ -289,12 +307,12 @@ public:
 			throw std::runtime_error("Trying to process empty tree");
 		}
 
-		std::stack<Node<T>*> stack;
+		std::stack<BSTNode<T>*> stack;
 		stack.push(m_root);
 
 		while (!stack.empty())
 		{
-			Node<T>* currentNode = stack.top();
+			BSTNode<T>* currentNode = stack.top();
 			stack.pop();
 
 			process(currentNode->getData());
@@ -317,12 +335,12 @@ public:
 			throw std::runtime_error("Trying to process empty tree");
 		}
 
-		std::queue<Node<T>*> queue;
+		std::queue<BSTNode<T>*> queue;
 		queue.push(m_root);
 
 		while (!queue.empty())
 		{
-			Node<T>* currentNode = queue.front();
+			BSTNode<T>* currentNode = queue.front();
 			queue.pop();
 
 			process(currentNode->getData());
@@ -340,15 +358,15 @@ public:
 
 	void clear()
 	{
-		postOrderTraversal([&](Node<T>* node) {
+		postOrderTraversal([&](BSTNode<T>* node) {
 			delete node;
 		});
 
 		m_root = nullptr;
 		m_depth = 0;
 	}
-
-	~BinaryTree()
+	
+	~BinarySearchTree()
 	{
 		clear();
 	}

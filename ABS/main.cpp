@@ -4,7 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include "Number.h"
-#include "BinaryTree.h"
+#include "BinarySearchTree.h"
 #include "IComparable.h"
 
 int main()
@@ -26,7 +26,7 @@ int main()
 			std::cout << i << "\n";
 		}
 
-		BinaryTree<Number*> bt;
+		BinarySearchTree<Number*> bt;
 		Number* number = new Number(1651651351);
 		bt.insert(number);
 		for (int i : numbers)
@@ -44,6 +44,11 @@ int main()
 		bt.find(number)->print();
 		bt.remove(number);
 		delete number;
+
+		std::cout << "Max key: ";
+		bt.findMaxKey()->print();
+		std::cout << "Min key: ";
+		bt.findMinKey()->print();
 
 		std::cout << "Pre order traversal:\n";
 		bt.processPreOrder([](Number* item) {

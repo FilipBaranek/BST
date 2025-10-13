@@ -13,19 +13,34 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Structures">
+      <UniqueIdentifier>{c3a000f6-876b-476b-8d95-95d8baba2037}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Structures\BST">
+      <UniqueIdentifier>{85f54d9b-1795-4598-a9c5-748fb92bf04c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Structures\AVL">
+      <UniqueIdentifier>{a548f54c-032e-49c3-af30-7314109b12a8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="IComparable.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="BinarySearchTree.h">
+      <Filter>Header Files\Structures\BST</Filter>
     </ClInclude>
-    <ClInclude Include="Node.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BinaryTree.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="BSTNode.h">
+      <Filter>Header Files\Structures\BST</Filter>
     </ClInclude>
     <ClInclude Include="Number.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IComparable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AVLNode.h">
+      <Filter>Header Files\Structures\AVL</Filter>
+    </ClInclude>
+    <ClInclude Include="AVLTree.h">
+      <Filter>Header Files\Structures\AVL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

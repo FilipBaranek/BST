@@ -3,18 +3,18 @@
 #include "IComparable.h"
 
 template<typename T>
-class Node
+class BSTNode
 {
 	static_assert(std::is_base_of_v<IComparable, std::remove_pointer_t<T>>, "T must inherit from IComparable");
 
 private:
 	T m_data;
-	Node<T>* m_ancestor;
-	Node<T>* m_leftChild;
-	Node<T>* m_rightChild;
+	BSTNode<T>* m_ancestor;
+	BSTNode<T>* m_leftChild;
+	BSTNode<T>* m_rightChild;
 
 public:
-	Node(T data, Node<T>* ancestor)
+	BSTNode(T data, BSTNode<T>* ancestor)
 	{
 		m_data = data;
 		m_ancestor = ancestor;
@@ -27,17 +27,17 @@ public:
 		m_data = data;
 	}
 
-	void setAncestor(Node* ancestor)
+	void setAncestor(BSTNode* ancestor)
 	{
 		m_ancestor = ancestor;
 	}
 
-	void setRightChild(Node* rightChild)
+	void setRightChild(BSTNode* rightChild)
 	{
 		m_rightChild = rightChild;
 	}
 
-	void setLeftChild(Node* leftChild)
+	void setLeftChild(BSTNode* leftChild)
 	{
 		m_leftChild = leftChild;
 	}
@@ -63,20 +63,20 @@ public:
 		return m_data;
 	}
 
-	Node* getAncestor()
+	BSTNode* getAncestor()
 	{
 		return m_ancestor;
 	}
 
-	Node* leftChild()
+	BSTNode* leftChild()
 	{
 		return m_leftChild;
 	}
 
-	Node* rightChild()
+	BSTNode* rightChild()
 	{
 		return m_rightChild;
 	}
 
-	~Node() = default;
+	~BSTNode() = default;
 };
