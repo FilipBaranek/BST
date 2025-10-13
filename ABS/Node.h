@@ -42,6 +42,22 @@ public:
 		m_leftChild = leftChild;
 	}
 
+	int childCount()
+	{
+		int count = 0;
+		
+		if (m_leftChild != nullptr)
+		{
+			++count;
+		}
+		if (m_rightChild != nullptr)
+		{
+			++count;
+		}
+
+		return count;
+	}
+
 	T getData()
 	{
 		return m_data;

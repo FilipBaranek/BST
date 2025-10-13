@@ -14,7 +14,7 @@ private:
 	Node<T>* m_root;
 	unsigned int m_depth;
 
-	Node<T>* findNode(T item)
+	Node<T>* findNode(T key)
 	{
 		if (m_root == nullptr)
 		{
@@ -24,7 +24,7 @@ private:
 		Node<T>* currentNode = m_root;
 		while (true)
 		{
-			int cmp = currentNode->getData()->compare(item);
+			int cmp = currentNode->getData()->compare(key);
 
 			if (cmp == 0)
 			{
@@ -141,55 +141,101 @@ public:
 		return m_depth;
 	}
 
-	T find(T item)
+	T find(T key)
 	{
-		return findNode(item)->getData();
+		return findNode(key)->getData();
 	}
 
-	T remove(T item)
+	T remove(T key)
 	{
-		Node<T>* currentNode = findNode(item);
+		Node<T>* currentNode = findNode(key);
 		if (currentNode == nullptr)
 		{
 			return nullptr;
 		}
 
-		if (currentNode->leftChild() != nullptr && currentNode->rightChild() != nullptr)
+		T data = currentNode->getData();
+		Node<T>* ancestor = currentNode->getAncestor();
+		int childCount = currentNode->childCount();
+		
+		if (childCount == 0)
 		{
-			Node<T>* successor = currentNode->rightChild();
-
-			while (successor->leftChild() != nullptr)
+			if (ancestor == nullptr)
 			{
-				successor = successor->leftChild();
+				m_root = nullptr;
 			}
-
-			currentNode->setData(successor->getData());
-			currentNode = successor;
+			else if (ancestor->leftChild() == currentNode)
+			{
+				ancestor->setLeftChild(nullptr);
+			}
+			else
+			{
+				ancestor->setRightChild(nullptr);
+			}
+			delete currentNode;
 		}
-
-		Node<T>* child = currentNode->leftChild() != nullptr ? currentNode->leftChild() : currentNode->rightChild();
-		if (child != nullptr)
+		else if (childCount == 1)
 		{
-			child->setAncestor(currentNode->getAncestor());
-		}
-
-		if (currentNode->getAncestor() == nullptr)
-		{
-			m_root = child;
-		}
-		else if (currentNode == currentNode->getAncestor()->leftChild())
-		{
-			currentNode->getAncestor()->setLeftChild(child);
+			Node<T>* child = currentNode->leftChild() != nullptr ? currentNode->leftChild() : currentNode->rightChild(); //Might be intentionaly nullptr if has no child
+			if (ancestor == nullptr)
+			{
+				m_root = child;
+				child->setAncestor(nullptr);
+			}
+			else
+			{
+				if (ancestor->leftChild() == currentNode)
+				{
+					ancestor->setLeftChild(child);
+				}
+				else
+				{
+					ancestor->setRightChild(child);
+				}
+				child->setAncestor(ancestor);
+			}
+			delete currentNode;
 		}
 		else
 		{
-			currentNode->getAncestor()->setRightChild(child);
+			Node<T>* swapNode = currentNode->rightChild();
+			while (swapNode->leftChild() != nullptr)
+			{
+				swapNode = swapNode->leftChild();
+			}
+
+			currentNode->setData(swapNode->getData());
+
+			Node<T>* swapNodeAncestor = swapNode->getAncestor();
+			Node<T>* swapNodeChild = swapNode->rightChild();	//Only possible child
+
+			if (swapNodeAncestor->leftChild() == swapNode)
+			{
+				swapNodeAncestor->setLeftChild(swapNodeChild);
+			}
+			else
+			{
+				swapNodeAncestor->setRightChild(swapNodeChild);
+			}
+
+
+			if (swapNodeChild != nullptr)
+			{
+				swapNodeChild->setAncestor(swapNodeAncestor);
+			}
+			delete swapNode;
 		}
 
-		T data = currentNode->getData();
-		delete currentNode;
 		return data;
 	}
+
+	/*
+	T remove(T&& key)
+	{
+		remove(key);
+		delete key;
+	}
+	*/
 
 	void processInOrder(std::function<void(T)> process)
 	{
