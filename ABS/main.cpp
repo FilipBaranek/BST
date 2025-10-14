@@ -65,18 +65,23 @@ int main()
 			delete item;
 		});
 
-		//
-		//BinarySearchTree<Number*>* at = new AVLTree<Number*>();
-		//for (int i : numbers)
-		//{
-		//	at->insert(new Number(i));
-		//}
+		
+		BinarySearchTree<Number*>* at = new AVLTree<Number*>();
+		for (int i : numbers)
+		{
+			at->insert(new Number(i));
+		}
 
-		//at->processPostOrder([](Number* item) {
-		//	delete item;
-		//});
+		std::cout << "AVL TREE:\n";
+		at->processInOrder([](Number* item) {
+			item->print();
+		});
 
+		at->processPostOrder([](Number* item) {
+			delete item;
+		});
 
+		delete at;
 	}
 
 	return 0;

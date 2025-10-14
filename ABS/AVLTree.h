@@ -3,7 +3,7 @@
 #include "AVLNode.h"
 
 template<typename T>
-class AVLTree : BinarySearchTree<T, AVLNode<T>>
+class AVLTree : public BinarySearchTree<T>
 {
 private:
 	void rotateLeft(AVLNode<T>* a)
@@ -118,7 +118,7 @@ private:
 public:
 	bool insert(T data) override
 	{
-		AVLNode<T>* insertedNode = static_cast<AVLNode<T>*>(this->insertNode(data));
+		AVLNode<T>* insertedNode = static_cast<AVLNode<T>*>(this->insertNode<AVLNode<T>>(data));
 		if (insertedNode == nullptr)
 		{
 			return false;
@@ -128,15 +128,16 @@ public:
 		return true;
 	}
 
-	void remove(T key) override
+	T remove(T& key) override
 	{
 		//TODO
+		return nullptr;
 	}
 
-	unsigned int depth()
-	{
-		return this->m_root->height();
-	}
+	//unsigned int depth()
+	//{
+	//	return this->m_root->height();
+	//}
 
 	//Destructor intentionaly inherited
 };

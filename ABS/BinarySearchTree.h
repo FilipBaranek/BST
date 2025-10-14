@@ -7,20 +7,20 @@
 #include "BSTNode.h"
 #include "IComparable.h"
 
-template<typename T, typename Node = BSTNode<T>>
+template<typename T>
 class BinarySearchTree
 {
 private:
 	unsigned int m_depth;
 
-	Node* findNode(T key)
+	BSTNode<T>* findNode(T key)
 	{
 		if (m_root == nullptr)
 		{
 			return nullptr;
 		}
 
-		Node* currentNode = m_root;
+		BSTNode<T>* currentNode = m_root;
 		while (true)
 		{
 			int cmp = currentNode->getData()->compare(key);
@@ -48,9 +48,9 @@ private:
 		}
 	}
 
-	Node* findMinKeyNode(Node* startingNode)
+	BSTNode<T>* findMinKeyNode(BSTNode<T>* startingNode)
 	{
-		Node* currentNode = startingNode;
+		BSTNode<T>* currentNode = startingNode;
 		while (currentNode->leftChild() != nullptr)
 		{
 			currentNode = currentNode->leftChild();
@@ -59,9 +59,9 @@ private:
 		return currentNode;
 	}
 
-	Node* findMaxKeyNode(Node* startingNode)
+	BSTNode<T>* findMaxKeyNode(BSTNode<T>* startingNode)
 	{
-		Node* currentNode = startingNode;
+		BSTNode<T>* currentNode = startingNode;
 		while (currentNode->rightChild() != nullptr)
 		{
 			currentNode = currentNode->rightChild();
@@ -70,7 +70,7 @@ private:
 		return currentNode;
 	}
 
-	void postOrderTraversal(std::function<void(Node*)> process)
+	void postOrderTraversal(std::function<void(BSTNode<T>*)> process)
 	{
 		if (m_root == nullptr)
 		{
@@ -98,7 +98,7 @@ private:
 				}
 				else
 				{
-					process(static_cast<Node*>(topNode));
+					process(topNode);
 					lastNode = topNode;
 					stack.pop();
 				}
@@ -107,8 +107,9 @@ private:
 	}
 
 protected:
-	Node* m_root;
+	BSTNode<T>* m_root;
 
+	template<typename Node>
 	BSTNode<T>* insertNode(T data)
 	{
 		if (m_root == nullptr)
@@ -118,7 +119,7 @@ protected:
 			return m_root;
 		}
 
-		int depth = 1;
+		unsigned int depth = 1;
 		BSTNode<T>* currentNode = m_root;
 		BSTNode<T>* newNode;
 		while (true)
@@ -169,7 +170,7 @@ public:
 
 	virtual bool insert(T data)
 	{
-		return insertNode(data) != nullptr;
+		return insertNode<BSTNode<T>>(data) != nullptr;
 	}
 
 	virtual unsigned int depth()
@@ -207,14 +208,14 @@ public:
 
 	virtual T remove(T& key)
 	{
-		Node* currentNode = findNode(key);
+		BSTNode<T>* currentNode = findNode(key);
 		if (currentNode == nullptr)
 		{
 			return nullptr;
 		}
 
 		T data = currentNode->getData();
-		Node* ancestor = currentNode->getAncestor();
+		BSTNode<T>* ancestor = currentNode->getAncestor();
 		int childCount = currentNode->childCount();
 		
 		if (childCount == 0)
@@ -235,7 +236,7 @@ public:
 		}
 		else if (childCount == 1)
 		{
-			Node* child = currentNode->leftChild() != nullptr ? currentNode->leftChild() : currentNode->rightChild(); //Might be intentionaly nullptr if has no child
+			BSTNode<T>* child = currentNode->leftChild() != nullptr ? currentNode->leftChild() : currentNode->rightChild(); //Might be intentionaly nullptr if has no child
 			if (ancestor == nullptr)
 			{
 				m_root = child;
@@ -257,10 +258,10 @@ public:
 		}
 		else
 		{
-			Node* swapNode = findMinKeyNode(currentNode->rightChild());
+			BSTNode<T>* swapNode = findMinKeyNode(currentNode->rightChild());
 			currentNode->setData(swapNode->getData());
-			Node* swapNodeAncestor = swapNode->getAncestor();
-			Node* swapNodeChild = swapNode->rightChild();	//Only possible child
+			BSTNode<T>* swapNodeAncestor = swapNode->getAncestor();
+			BSTNode<T>* swapNodeChild = swapNode->rightChild();	//Only possible child
 
 			if (swapNodeAncestor->leftChild() == swapNode)
 			{
@@ -289,7 +290,7 @@ public:
 			throw std::runtime_error("Trying to process empty tree");
 		}
 
-		Node* currentNode = m_root;
+		BSTNode<T>* currentNode = m_root;
 		while (currentNode != nullptr)
 		{
 			if (currentNode->leftChild() == nullptr)
@@ -299,7 +300,7 @@ public:
 			}
 			else
 			{
-				Node* predecessor = currentNode->leftChild();
+				BSTNode<T>* predecessor = currentNode->leftChild();
 				while (predecessor->rightChild() != nullptr && predecessor->rightChild() != currentNode)
 				{
 					predecessor = predecessor->rightChild();
@@ -322,7 +323,7 @@ public:
 
 	void processPostOrder(std::function<void(T)> process)
 	{
-		postOrderTraversal([&](Node* node) {
+		postOrderTraversal([&](BSTNode<T>* node) {
 			process(node->getData());
 		});
 	}
@@ -334,12 +335,12 @@ public:
 			throw std::runtime_error("Trying to process empty tree");
 		}
 
-		std::stack<Node*> stack;
+		std::stack<BSTNode<T>*> stack;
 		stack.push(m_root);
 
 		while (!stack.empty())
 		{
-			Node* currentNode = stack.top();
+			BSTNode<T>* currentNode = stack.top();
 			stack.pop();
 
 			process(currentNode->getData());
@@ -362,12 +363,12 @@ public:
 			throw std::runtime_error("Trying to process empty tree");
 		}
 
-		std::queue<Node*> queue;
+		std::queue<BSTNode<T>*> queue;
 		queue.push(m_root);
 
 		while (!queue.empty())
 		{
-			Node* currentNode = queue.front();
+			BSTNode<T>* currentNode = queue.front();
 			queue.pop();
 
 			process(currentNode->getData());
@@ -385,7 +386,7 @@ public:
 
 	void clear()
 	{
-		postOrderTraversal([&](Node* node) {
+		postOrderTraversal([&](BSTNode<T>* node) {
 			delete node;
 		});
 
