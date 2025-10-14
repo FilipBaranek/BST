@@ -18,7 +18,7 @@ void Number::print()
 
 int Number::compare(IComparable* other) const
 {
-	int otherData = ((Number*)other)->getData();
+	int otherData = static_cast<Number*>(other)->getData();
 
 	if (m_data == otherData)
 	{

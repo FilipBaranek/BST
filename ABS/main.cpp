@@ -6,6 +6,7 @@
 #include "Number.h"
 #include "BinarySearchTree.h"
 #include "IComparable.h"
+#include "AVLTree.h"
 
 int main()
 {
@@ -63,6 +64,19 @@ int main()
 		bt.processPostOrder([](Number* item) {
 			delete item;
 		});
+
+		//
+		//BinarySearchTree<Number*>* at = new AVLTree<Number*>();
+		//for (int i : numbers)
+		//{
+		//	at->insert(new Number(i));
+		//}
+
+		//at->processPostOrder([](Number* item) {
+		//	delete item;
+		//});
+
+
 	}
 
 	return 0;
