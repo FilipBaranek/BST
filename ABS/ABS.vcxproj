@@ -130,6 +130,7 @@
     <ClInclude Include="IComparable.h" />
     <ClInclude Include="BSTNode.h" />
     <ClInclude Include="Number.h" />
+    <ClInclude Include="Tester.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

@@ -8,6 +8,13 @@
 #include "IComparable.h"
 
 template<typename T>
+struct RemoveData
+{
+	BSTNode<T>* m_removedNodeAncestor;
+	T m_data;
+};
+
+template<typename T>
 class BinarySearchTree
 {
 private:
@@ -112,6 +119,8 @@ protected:
 	template<typename Node>
 	BSTNode<T>* insertNode(T data)
 	{
+		static_assert(std::is_base_of_v<BSTNode<T>, Node>, "Node must inherit from BSTNode<T>");
+
 		if (m_root == nullptr)
 		{
 			m_root = new Node(data, nullptr);
@@ -161,63 +170,18 @@ protected:
 		return newNode;
 	}
 
-public:
-	BinarySearchTree()
-	{
-		m_root = nullptr;
-		m_depth = 0;
-	}
-
-	virtual bool insert(T data)
-	{
-		return insertNode<BSTNode<T>>(data) != nullptr;
-	}
-
-	virtual unsigned int depth()
-	{
-		return m_depth;
-	}
-
-	T find(T& key)
-	{
-		return findNode(key)->getData();
-	}
-
-	bool find(T lowestKey, T highestKey, std::vector<T>& outputInterval)
-	{
-		//TODO///////
-
-		if (m_root == nullptr)
-		{
-			return false;
-		}
-
-
-		return true;
-	}
-
-	T findMinKey()
-	{
-		return findMinKeyNode(m_root)->getData();
-	}
-
-	T findMaxKey()
-	{
-		return findMaxKeyNode(m_root)->getData();
-	}
-
-	virtual T remove(T& key)
+	RemoveData<T> removeNode(T& key)
 	{
 		BSTNode<T>* currentNode = findNode(key);
 		if (currentNode == nullptr)
 		{
-			return nullptr;
+			return {};
 		}
 
 		T data = currentNode->getData();
 		BSTNode<T>* ancestor = currentNode->getAncestor();
 		int childCount = currentNode->childCount();
-		
+
 		if (childCount == 0)
 		{
 			if (ancestor == nullptr)
@@ -280,7 +244,79 @@ public:
 			delete swapNode;
 		}
 
-		return data;
+		return { ancestor, data };
+	}
+
+public:
+	BinarySearchTree()
+	{
+		m_root = nullptr;
+		m_depth = 0;
+	}
+
+	virtual bool insert(T data)
+	{
+		return insertNode<BSTNode<T>>(data) != nullptr;
+	}
+
+	virtual unsigned int depth()
+	{
+		return m_depth;
+	}
+
+	T find(T& key)
+	{
+		return findNode(key)->getData();
+	}
+
+	bool find(T lowestKey, T highestKey, std::vector<T>& outputInterval)
+	{
+		if (m_root == nullptr)
+		{
+			return false;
+		}
+		
+		std::stack<BSTNode<T>*> stack;
+		stack.push(m_root);
+
+		while (!stack.empty())
+		{
+			BSTNode<T>* currentNode = stack.top();
+			stack.pop();
+
+			int cmpLowest = currentNode->getData()->compare(lowestKey);
+			int cmpHighest = currentNode->getData()->compare(highestKey);
+
+			if (cmpLowest <= 0 && cmpHighest >= 0)
+			{
+				outputInterval.push_back(currentNode->getData());
+			}
+			if (cmpLowest < 0 && currentNode->leftChild() != nullptr)
+			{
+				stack.push(currentNode->leftChild());
+			}
+			if (cmpHighest > 0 && currentNode->rightChild() != nullptr)
+			{
+				stack.push(currentNode->rightChild());
+			}
+		}
+
+		return !outputInterval.empty();
+	}
+
+	T findMinKey()
+	{
+		return findMinKeyNode(m_root)->getData();
+	}
+
+	T findMaxKey()
+	{
+		return findMaxKeyNode(m_root)->getData();
+	}
+
+	virtual T remove(T& key)
+	{
+		return removeNode(key).m_data;
 	}
 
 	void processInOrder(std::function<void(T)> process)

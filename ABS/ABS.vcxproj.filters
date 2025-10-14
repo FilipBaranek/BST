@@ -22,6 +22,9 @@
     <Filter Include="Header Files\Structures\AVL">
       <UniqueIdentifier>{a548f54c-032e-49c3-af30-7314109b12a8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Tests">
+      <UniqueIdentifier>{f82dbf3a-8c02-4461-a0d1-791c6c554481}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BinarySearchTree.h">
@@ -41,6 +44,9 @@
     </ClInclude>
     <ClInclude Include="AVLTree.h">
       <Filter>Header Files\Structures\AVL</Filter>
+    </ClInclude>
+    <ClInclude Include="Tester.h">
+      <Filter>Header Files\Tests</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

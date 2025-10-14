@@ -5,6 +5,8 @@
 template<typename T>
 class AVLTree : public BinarySearchTree<T>
 {
+//Destructor intentionaly inherited
+
 private:
 	void rotateLeft(AVLNode<T>* a)
 	{
@@ -130,14 +132,14 @@ public:
 
 	T remove(T& key) override
 	{
-		//TODO
+		AVLNode<T>* rebalanceStartingNode = static_cast<AVLNode<T>*>(this->removeNode(key).m_removedNodeAncestor);
+		rebalance(rebalanceStartingNode);
+
 		return nullptr;
 	}
 
-	//unsigned int depth()
-	//{
-	//	return this->m_root->height();
-	//}
-
-	//Destructor intentionaly inherited
+	unsigned int depth()
+	{
+		return static_cast<AVLNode<T>*>(this->m_root)->height();
+	}
 };

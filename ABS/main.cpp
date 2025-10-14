@@ -1,12 +1,34 @@
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 #include <iostream>
-#include <vector>
-#include <algorithm>
-#include "Number.h"
-#include "BinarySearchTree.h"
-#include "IComparable.h"
+#include "Tester.h"
 #include "AVLTree.h"
+
+void testBinarySearchTree()
+{
+	BinarySearchTree<Number*> bt;
+	Tester<BinarySearchTree<Number*>, Number> tester;
+
+	tester.testInsertion(bt);
+	tester.testRemoval(bt);
+	tester.testPointSearch(bt);
+	//tester.testIntervalSearch(bt);
+	tester.testFindMinKey(bt);
+	tester.testFindMaxKey(bt);
+}
+
+void testAVLTree()
+{
+	AVLTree<Number*> at;
+	Tester<AVLTree<Number*>, Number> tester;
+
+	tester.testInsertion(at);
+	//tester.testRemoval(at);
+	tester.testPointSearch(at);
+	//tester.testIntervalSearch(at);
+	tester.testFindMinKey(at);
+	tester.testFindMaxKey(at);
+}
 
 int main()
 {
@@ -14,74 +36,10 @@ int main()
 
 	srand(time(nullptr));
 	{
-		std::vector<int> numbers;
-		for (int i = 1; i <= 10; ++i)
-		{
-			numbers.push_back(i);
-		}
-		std::random_shuffle(numbers.begin(), numbers.end());
-
-		std::cout << "Numbers order:\n";
-		for (int i : numbers)
-		{
-			std::cout << i << "\n";
-		}
-
-		BinarySearchTree<Number*> bt;
-		Number* number = new Number(1651651351);
-		bt.insert(number);
-		for (int i : numbers)
-		{
-			bt.insert(new Number(i));
-		}
-		std::cout << "Numbers were inserted, tree depth is " << bt.depth() << "\n";
-
-		std::cout << "\nIn order traversal:\n";
-		bt.processInOrder([](Number* item) {
-			item->print();
-		});
-
-		std::cout << "Found item: ";
-		bt.find(number)->print();
-		bt.remove(number);
-		delete number;
-
-		std::cout << "Max key: ";
-		bt.findMaxKey()->print();
-		std::cout << "Min key: ";
-		bt.findMinKey()->print();
-
-		std::cout << "Pre order traversal:\n";
-		bt.processPreOrder([](Number* item) {
-			item->print();
-		});
-
-		std::cout << "Level order traversal:\n";
-		bt.processLevelOrder([](Number* item) {
-			item->print();
-		});
-
-		bt.processPostOrder([](Number* item) {
-			delete item;
-		});
-
-		
-		BinarySearchTree<Number*>* at = new AVLTree<Number*>();
-		for (int i : numbers)
-		{
-			at->insert(new Number(i));
-		}
-
-		std::cout << "AVL TREE:\n";
-		at->processInOrder([](Number* item) {
-			item->print();
-		});
-
-		at->processPostOrder([](Number* item) {
-			delete item;
-		});
-
-		delete at;
+		std::cout << "Binary search tree:\n";
+		testBinarySearchTree();
+		std::cout << "AVL tree\n";
+		testAVLTree();
 	}
 
 	return 0;
