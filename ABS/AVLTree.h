@@ -85,6 +85,12 @@ private:
 				AVLNode<T>* parent = static_cast<AVLNode<T>*>(current->getAncestor());
 				if (current->balanceFactor() < -1)
 				{
+					AVLNode<T>* right = static_cast<AVLNode<T>*>(current->rightChild());
+					if (right == nullptr)
+					{
+						current = parent;
+						continue;
+					}
 					if (static_cast<AVLNode<T>*>(current->rightChild())->balanceFactor() <= 0)
 					{
 						// RR
@@ -99,6 +105,12 @@ private:
 				}
 				else if (current->balanceFactor() > 1)
 				{
+					AVLNode<T>* left = static_cast<AVLNode<T>*>(current->leftChild());
+					if (left == nullptr)
+					{
+						current = parent;
+						continue;
+					}
 					if (static_cast<AVLNode<T>*>(current->leftChild())->balanceFactor() >= 0)
 					{
 						//LL
@@ -111,7 +123,8 @@ private:
 						rotateRight(current);
 					}
 				}
-				break;
+				current = parent;
+				continue;
 			}
 			current = static_cast<AVLNode<T>*>(current->getAncestor());
 		}
@@ -132,10 +145,11 @@ public:
 
 	T remove(T& key) override
 	{
-		AVLNode<T>* rebalanceStartingNode = static_cast<AVLNode<T>*>(this->removeNode(key).m_removedNodeAncestor);
+		RemoveData<T> rd = this->removeNode(key);
+		AVLNode<T>* rebalanceStartingNode = static_cast<AVLNode<T>*>(rd.m_removedNodeAncestor);
 		rebalance(rebalanceStartingNode);
 
-		return nullptr;
+		return rd.m_data;
 	}
 
 	unsigned int depth()

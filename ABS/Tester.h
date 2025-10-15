@@ -2,8 +2,11 @@
 #include <vector>
 #include <random>
 #include <algorithm>
+#include <chrono>
 #include "Number.h"
 #include "BinarySearchTree.h"
+
+using namespace std::chrono;
 
 template<typename Structure, typename T>
 class Tester
@@ -16,13 +19,16 @@ private:
 	static constexpr unsigned int SEARCH_DATA_COUNT = 5000000;
 	static constexpr unsigned int SEARCH_INTERVAL_COUNT = 1000000;
 	static constexpr unsigned int SEARCH_INTERVAL = 500;
+	static constexpr unsigned int KEY_SEARCH_COUNT = 2000000;
+	Structure& m_bts;
 	std::vector<T*> m_randomData;
 	std::random_device m_rd;
 	std::mt19937 m_g{ m_rd() };
 
 public:
-	Tester()
+	Tester(Structure& structure) : m_bts(structure)
 	{
+		m_randomData.reserve(RANDOM_DATA_COUNT);
 		for (int i = 1; i <= RANDOM_DATA_COUNT; ++i)
 		{
 			m_randomData.push_back(new T(i));
@@ -32,76 +38,110 @@ public:
 		std::cout << "Data generated\n";
 	}
 
-	void testInsertion(Structure& bts)
+	void testInsertion()
 	{
-		std::cout << "INSERT START\n";
+		std::cout << "INSERTION\n";
+		auto start = high_resolution_clock::now();
 		for (auto& num : m_randomData)
 		{
-			bts.insert(num);
+			m_bts.insert(num);
 		}
-		std::cout << "INSERT END\n";
+		auto end = high_resolution_clock::now();
+		auto duration = duration_cast<seconds>(end - start).count();
+		std::cout << duration << " seconds\n";
 	}
 
-	void testRemoval(Structure& bts)
+	void testRemoval()
 	{
 		std::shuffle(m_randomData.begin(), m_randomData.begin() + REMOVE_DATA_COUNT, m_g);
 
-		std::cout << "REMOVE START\n";
+		std::cout << "REMOVAL\n";
+		auto start = high_resolution_clock::now();
 		for (int i = 0; i < REMOVE_DATA_COUNT; ++i)
 		{
-			bts.remove(m_randomData[i]);
+			m_bts.remove(m_randomData[i]);
 		}
-		std::cout << "REMOVE END\n";
+		auto end = high_resolution_clock::now();
+		auto duration = duration_cast<seconds>(end - start).count();
+		std::cout << duration << " seconds\n";
 	}
 
-	void testPointSearch(Structure& bts)
+	void testPointSearch()
 	{
 		std::shuffle(m_randomData.begin() + REMOVE_DATA_COUNT, m_randomData.begin() + REMOVE_DATA_COUNT + SEARCH_DATA_COUNT, m_g);
 
-		std::cout << "POINT SEARCH START\n";
+		std::cout << "POINT SEARCH\n";
+		auto start = high_resolution_clock::now();
 		for (int i = REMOVE_DATA_COUNT; i < REMOVE_DATA_COUNT + SEARCH_DATA_COUNT; ++i)
 		{
-			bts.find(m_randomData[i]);
+			m_bts.find(m_randomData[i]);
 		}
-		std::cout << "POINT SEARCH END\n";
+		auto end = high_resolution_clock::now();
+		auto duration = duration_cast<seconds>(end - start).count();
+		std::cout << duration << " seconds\n";
 	}
 
-	void testIntervalSearch(Structure& bts)
+	void testIntervalSearch()
 	{
-		std::shuffle(m_randomData.begin(), m_randomData.begin() + SEARCH_INTERVAL_COUNT, m_g);
+		m_randomData.clear();
+		for (int i = 1; i <= SEARCH_INTERVAL_COUNT + SEARCH_INTERVAL; ++i)
+		{
+			m_randomData.push_back(new Number(i));
+		}
+
 		std::vector<T*> interval;
+		interval.reserve(SEARCH_INTERVAL);
 		int currentReplication = 0;
 
-		std::cout << "INTERVAL SEARCH START\n";
+		std::cout << "INTERVAL SEARCH\n";
+		auto start = high_resolution_clock::now();
 		for (int i = 0; i < SEARCH_INTERVAL_COUNT; ++i)
 		{
-			bts.find(m_randomData[currentReplication], m_randomData[currentReplication + SEARCH_INTERVAL - 1], interval);
-			currentReplication += SEARCH_INTERVAL;
+			interval.clear();
+			m_bts.find(m_randomData[currentReplication], m_randomData[currentReplication + SEARCH_INTERVAL - 1], interval);
+			++currentReplication;
 		}
-
-		std::cout << "INTERVAL SEARCH END\n";
+		auto end = high_resolution_clock::now();
+		auto duration = duration_cast<seconds>(end - start).count();
+		std::cout << duration << " seconds\n";
 	}
 
-	void testFindMinKey(Structure& bts)
+	void testFindMinKey()
 	{
-		std::cout << "SEARCH FOR MIN KEY START\n";
-		bts.findMinKey();
-		std::cout << "SEARCH FOR MIN KEY END\n";
+		std::cout << "SEARCH FOR MIN KEY\n";
+		auto start = high_resolution_clock::now();
+		for (int i{}; i < KEY_SEARCH_COUNT; ++i)
+		{
+			m_bts.findMinKey();
+		}
+		auto end = high_resolution_clock::now();
+		auto duration = duration_cast<seconds>(end - start).count();
+		std::cout << duration << " seconds\n";
 	}
 
-	void testFindMaxKey(Structure& bts)
+	void testFindMaxKey()
 	{
-		std::cout << "SEARCH FOR MAX KEY START\n";
-		bts.findMaxKey();
-		std::cout << "SEARCH FOR MAX KEY END\n";
+		std::cout << "SEARCH FOR MAX KEY\n";
+		auto start = high_resolution_clock::now();
+		for (int i{}; i < KEY_SEARCH_COUNT; ++i)
+		{
+			m_bts.findMaxKey();
+		}
+		auto end = high_resolution_clock::now();
+		auto duration = duration_cast<seconds>(end - start).count();
+		std::cout << duration << " seconds\n";
 	}
-	
+
 	~Tester()
 	{
 		for (auto& num : m_randomData)
 		{
 			delete num;
 		}
+
+		m_bts.processPostOrder([](T* item) {
+			delete item;
+		});
 	}
 };
 

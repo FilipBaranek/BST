@@ -10,7 +10,7 @@ public:
 	Number(int data);
 	int getData();
 	void print();
-	int compare(IComparable* other) const override;
+	inline int compare(IComparable* other) const override;
 	~Number() = default;
 };
 

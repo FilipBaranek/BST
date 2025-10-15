@@ -7,27 +7,27 @@
 void testBinarySearchTree()
 {
 	BinarySearchTree<Number*> bt;
-	Tester<BinarySearchTree<Number*>, Number> tester;
+	Tester<BinarySearchTree<Number*>, Number> tester(bt);
 
-	tester.testInsertion(bt);
-	tester.testRemoval(bt);
-	tester.testPointSearch(bt);
-	//tester.testIntervalSearch(bt);
-	tester.testFindMinKey(bt);
-	tester.testFindMaxKey(bt);
+	tester.testInsertion();
+	tester.testIntervalSearch();
+	tester.testRemoval();
+	tester.testPointSearch();
+	tester.testFindMinKey();
+	tester.testFindMaxKey();
 }
 
 void testAVLTree()
 {
 	AVLTree<Number*> at;
-	Tester<AVLTree<Number*>, Number> tester;
+	Tester<AVLTree<Number*>, Number> tester(at);
 
-	tester.testInsertion(at);
-	//tester.testRemoval(at);
-	tester.testPointSearch(at);
-	//tester.testIntervalSearch(at);
-	tester.testFindMinKey(at);
-	tester.testFindMaxKey(at);
+	tester.testInsertion();
+	tester.testIntervalSearch();
+	tester.testRemoval();
+	tester.testPointSearch();
+	tester.testFindMinKey();
+	tester.testFindMaxKey();
 }
 
 int main()

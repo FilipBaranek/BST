@@ -18,9 +18,11 @@ template<typename T>
 class BinarySearchTree
 {
 private:
-	unsigned int m_depth;
 
-	BSTNode<T>* findNode(T key)
+	unsigned int m_size = 0;
+	unsigned int m_depth = 0;
+
+	BSTNode<T>* findNode(T& key)
 	{
 		if (m_root == nullptr)
 		{
@@ -125,6 +127,7 @@ protected:
 		{
 			m_root = new Node(data, nullptr);
 			m_depth = 1;
+			++m_size;
 			return m_root;
 		}
 
@@ -166,6 +169,7 @@ protected:
 		{
 			m_depth = depth;
 		}
+		++m_size;
 
 		return newNode;
 	}
@@ -236,14 +240,16 @@ protected:
 				swapNodeAncestor->setRightChild(swapNodeChild);
 			}
 
-
 			if (swapNodeChild != nullptr)
 			{
 				swapNodeChild->setAncestor(swapNodeAncestor);
 			}
+
+			ancestor = swapNodeAncestor;
 			delete swapNode;
 		}
 
+		--m_size;
 		return { ancestor, data };
 	}
 
@@ -254,14 +260,19 @@ public:
 		m_depth = 0;
 	}
 
-	virtual bool insert(T data)
+	unsigned int size()
 	{
-		return insertNode<BSTNode<T>>(data) != nullptr;
+		return m_size;
 	}
 
 	virtual unsigned int depth()
 	{
 		return m_depth;
+	}
+
+	virtual bool insert(T data)
+	{
+		return insertNode<BSTNode<T>>(data) != nullptr;
 	}
 
 	T find(T& key)
@@ -287,15 +298,15 @@ public:
 			int cmpLowest = currentNode->getData()->compare(lowestKey);
 			int cmpHighest = currentNode->getData()->compare(highestKey);
 
-			if (cmpLowest <= 0 && cmpHighest >= 0)
-			{
-				outputInterval.push_back(currentNode->getData());
-			}
-			if (cmpLowest < 0 && currentNode->leftChild() != nullptr)
+			if (cmpLowest == -1 && currentNode->leftChild() != nullptr)
 			{
 				stack.push(currentNode->leftChild());
 			}
-			if (cmpHighest > 0 && currentNode->rightChild() != nullptr)
+			if (cmpLowest != -1 && cmpHighest != 1)
+			{
+				outputInterval.push_back(currentNode->getData());
+			}
+			if (cmpHighest == 1 && currentNode->rightChild() != nullptr)
 			{
 				stack.push(currentNode->rightChild());
 			}

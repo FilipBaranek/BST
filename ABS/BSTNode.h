@@ -58,22 +58,22 @@ public:
 		return count;
 	}
 
-	T getData()
+	T& getData()
 	{
 		return m_data;
 	}
 
-	BSTNode* getAncestor()
+	BSTNode*& getAncestor()
 	{
 		return m_ancestor;
 	}
 
-	BSTNode* leftChild()
+	BSTNode*& leftChild()
 	{
 		return m_leftChild;
 	}
 
-	BSTNode* rightChild()
+	BSTNode*& rightChild()
 	{
 		return m_rightChild;
 	}
