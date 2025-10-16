@@ -25,6 +25,9 @@
     <Filter Include="Header Files\Tests">
       <UniqueIdentifier>{f82dbf3a-8c02-4461-a0d1-791c6c554481}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Tests">
+      <UniqueIdentifier>{0aefcb64-fe56-4bb3-a00b-f5bf5e70ea23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BinarySearchTree.h">
@@ -45,6 +48,12 @@
     <ClInclude Include="AVLTree.h">
       <Filter>Header Files\Structures\AVL</Filter>
     </ClInclude>
+    <ClInclude Include="BTTester.h">
+      <Filter>Header Files\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="LinkedListTester.h">
+      <Filter>Header Files\Tests</Filter>
+    </ClInclude>
     <ClInclude Include="Tester.h">
       <Filter>Header Files\Tests</Filter>
     </ClInclude>
@@ -55,6 +64,9 @@
     </ClCompile>
     <ClCompile Include="Number.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkedListTester.cpp">
+      <Filter>Source Files\Tests</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

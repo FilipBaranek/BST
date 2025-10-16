@@ -129,10 +129,13 @@
     <ClInclude Include="BinarySearchTree.h" />
     <ClInclude Include="IComparable.h" />
     <ClInclude Include="BSTNode.h" />
+    <ClInclude Include="LinkedListTester.h" />
     <ClInclude Include="Number.h" />
+    <ClInclude Include="BTTester.h" />
     <ClInclude Include="Tester.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="LinkedListTester.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Number.cpp" />
   </ItemGroup>
