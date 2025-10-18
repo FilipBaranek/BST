@@ -6,32 +6,56 @@
 #include "LinkedListTester.h"
 #include "AVLTree.h"
 #include "Number.h"
+#include "MapTester.h"
 
-//void testBinarySearchTree()
-//{
-//	BinarySearchTree<Number*> bt;
-//	Tester<BinarySearchTree<Number*>, Number> tester(bt);
-//
-//	tester.testInsertion();
-//	tester.testPointSearch();
-//	tester.testFindMinKey();
-//	tester.testFindMaxKey();
-//	tester.testIntervalSearch();
-//	tester.testRemoval();
-//}
-//
-//void testAVLTree()
-//{
-//	AVLTree<Number*> at;
-//	Tester<AVLTree<Number*>, Number> tester(at);
-//
-//	tester.testInsertion();
-//	tester.testPointSearch();
-//	tester.testFindMinKey();
-//	tester.testFindMaxKey();
-//	tester.testIntervalSearch();
-//	tester.testRemoval();
-//}
+
+
+void runBTTester(bool dataInOrder = false)
+{
+	BinarySearchTree<Number*> bt;
+	AVLTree<Number*> at;
+
+	std::vector<Tester*> bstTesters;
+	bstTesters.push_back(new BTTester<BinarySearchTree<Number*>, Number>(bt, "Binary search tree", dataInOrder));
+	bstTesters.push_back(new BTTester<AVLTree<Number*>, Number>(at, "AVL tree", dataInOrder));
+	bstTesters.shrink_to_fit();
+
+	for (auto& tester : bstTesters)
+	{
+		tester->printName();
+		tester->testInsertion();
+		tester->testRemoval();
+		tester->testPointSearch();
+		tester->testIntervalSearch();
+		tester->testFindMaxKey();
+		tester->testFindMinKey();
+		std::cout << "\n";
+
+		delete tester;
+	}
+}
+
+void testOrderedData()
+{
+	runBTTester(true);
+}
+
+void testRandomData()
+{
+	runBTTester();
+}
+
+void testMap()
+{
+	Tester* mt = new MapTester("Map tester");
+	mt->testInsertion();
+	mt->testRemoval();
+	mt->testPointSearch();
+	mt->testIntervalSearch();
+	mt->testFindMaxKey();
+	mt->testFindMinKey();
+	delete mt;
+}
 
 int main()
 {
@@ -39,31 +63,20 @@ int main()
 
 	srand(time(nullptr));
 	{
-		//std::cout << "Binary search tree:\n";
-		//testBinarySearchTree();
-		//std::cout << "AVL tree\n";
-		//testAVLTree();
+		std::cout << "TESTING RANDOM DATA\n";
+		testRandomData();
+		//std::cout << "\nTESTING IN ORDER DATA\n";
+		//testOrderedData();
+		std::cout << "\nTESTING STD::MAP\n";
+		testMap();
 
-		BinarySearchTree<Number*> bt;
-		AVLTree<Number*> at;
 
-		std::vector<Tester*> testers;
-		testers.push_back(new BTTester<BinarySearchTree<Number*>, Number>(bt, "Binary search tree"));
-		testers.push_back(new BTTester<AVLTree<Number*>, Number>(at, "AVL tree"));
-		testers.push_back(new LinkedListTester("Linked list"));
 
-		for (auto& tester : testers)
-		{
-			tester->printName();
-			tester->testInsertion();
-			tester->testRemoval();
-			tester->testPointSearch();
-			tester->testFindMinKey();
-			tester->testFindMaxKey();
-			//tester->testIntervalSearch();
-
-			delete tester;
-		}
+		////////
+		////////
+		//////// TREBA VYMYSLIET AKO NEHLADAT CISLA KTORE UZ NIE SU V STROME
+		///////
+		////////
 	}
 
 	return 0;

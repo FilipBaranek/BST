@@ -280,11 +280,11 @@ public:
 		return findNode(key)->getData();
 	}
 
-	bool find(T lowestKey, T highestKey, std::vector<T>& outputInterval)
+	void find(T lowestKey, T highestKey, std::vector<T>& outputInterval)
 	{
 		if (m_root == nullptr)
 		{
-			return false;
+			return;
 		}
 		
 		std::stack<BSTNode<T>*> stack;
@@ -311,8 +311,6 @@ public:
 				stack.push(currentNode->rightChild());
 			}
 		}
-
-		return !outputInterval.empty();
 	}
 
 	T findMinKey()

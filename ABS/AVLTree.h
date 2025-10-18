@@ -154,6 +154,11 @@ public:
 
 	unsigned int depth()
 	{
+		if (this->m_root == nullptr)
+		{
+			return 0;
+		}
+
 		return static_cast<AVLNode<T>*>(this->m_root)->height();
 	}
 };

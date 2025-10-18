@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <map>
 #include "Tester.h"
 #include "Number.h"
 #include "BinarySearchTree.h"
@@ -14,7 +15,7 @@ private:
 	std::vector<T*> m_randomData;
 
 public:
-	BTTester(Structure& structure, const char* name) : m_bts(structure)
+	BTTester(Structure& structure, const char* name, bool dataInOrder = false) : m_bts(structure)
 	{
 		m_name = name;
 		m_randomData.reserve(RANDOM_DATA_COUNT);
@@ -23,7 +24,10 @@ public:
 			m_randomData.push_back(new T(i));
 		}
 
-		std::shuffle(m_randomData.begin(), m_randomData.end(), m_g);
+		if (!dataInOrder)
+		{
+			std::shuffle(m_randomData.begin(), m_randomData.end(), m_g);
+		}
 		std::cout << "Data generated\n";
 	}
 
@@ -42,7 +46,7 @@ public:
 
 	void testRemoval() override
 	{
-		std::shuffle(m_randomData.begin(), m_randomData.begin() + REMOVE_DATA_COUNT, m_g);
+		std::shuffle(m_randomData.begin(), m_randomData.end(), m_g);
 
 		std::cout << "REMOVAL\n";
 		auto start = high_resolution_clock::now();
@@ -53,15 +57,20 @@ public:
 		auto end = high_resolution_clock::now();
 		auto duration = duration_cast<seconds>(end - start).count();
 		std::cout << duration << " seconds\n";
+
+		for (auto it = m_randomData.begin(); it != m_randomData.begin() + REMOVE_DATA_COUNT; ++it)
+		{
+			delete *it;
+		}
 	}
 
 	void testPointSearch() override
 	{
-		std::shuffle(m_randomData.begin() + REMOVE_DATA_COUNT, m_randomData.begin() + REMOVE_DATA_COUNT + SEARCH_DATA_COUNT, m_g);
+		std::shuffle(m_randomData.begin(), m_randomData.end(), m_g);
 
 		std::cout << "POINT SEARCH\n";
 		auto start = high_resolution_clock::now();
-		for (int i = REMOVE_DATA_COUNT; i < REMOVE_DATA_COUNT + SEARCH_DATA_COUNT; ++i)
+		for (int i{}; i < SEARCH_DATA_COUNT; ++i)
 		{
 			m_bts.find(m_randomData[i]);
 		}
@@ -70,28 +79,44 @@ public:
 		std::cout << duration << " seconds\n";
 	}
 
+	void generateInterval(int& minKey, int& maxKey)
+	{
+		minKey = -1;
+		while (minKey <= 0 || minKey >= m_randomData.size() - SEARCH_INTERVAL)
+		{
+			minKey = (rand() % m_randomData.size()) + 1;
+		}
+		maxKey = minKey + SEARCH_INTERVAL;
+	}
+
 	void testIntervalSearch() override
 	{
-		m_randomData.clear();
-		for (int i = 1; i <= SEARCH_INTERVAL_COUNT + SEARCH_INTERVAL; ++i)
+		std::map<Number*, Number*> keys;
+		int min, max;
+		for (int i{}; i < SEARCH_INTERVAL_COUNT; ++i)
 		{
-			m_randomData.push_back(new Number(i));
+			generateInterval(min, max);
+			keys[new Number(min)] = new Number(max);
 		}
 
 		std::vector<T*> interval;
-		interval.reserve(SEARCH_INTERVAL_COUNT + SEARCH_INTERVAL);
-		int currentReplication = 0;
+		interval.reserve(m_randomData.size());
 
 		std::cout << "INTERVAL SEARCH\n";
 		auto start = high_resolution_clock::now();
-		for (int i = 0; i < SEARCH_INTERVAL_COUNT; ++i)
+		for (const auto& keyPair : keys)
 		{
-			m_bts.find(m_randomData[currentReplication], m_randomData[currentReplication + SEARCH_INTERVAL - 1], interval);
-			++currentReplication;
+			m_bts.find(keyPair.first, keyPair.second, interval);
 		}
 		auto end = high_resolution_clock::now();
 		auto duration = duration_cast<seconds>(end - start).count();
 		std::cout << duration << " seconds\n";
+
+		for (const auto& keyPair : keys)
+		{
+			delete keyPair.first;
+			delete keyPair.second;
+		}
 	}
 
 	void testFindMinKey() override
@@ -103,8 +128,8 @@ public:
 			m_bts.findMinKey();
 		}
 		auto end = high_resolution_clock::now();
-		auto duration = duration_cast<seconds>(end - start).count();
-		std::cout << duration << " seconds\n";
+		auto duration = duration_cast<milliseconds>(end - start).count();
+		std::cout << duration << " milliseconds\n";
 	}
 
 	void testFindMaxKey() override
@@ -116,8 +141,8 @@ public:
 			m_bts.findMaxKey();
 		}
 		auto end = high_resolution_clock::now();
-		auto duration = duration_cast<seconds>(end - start).count();
-		std::cout << duration << " seconds\n";
+		auto duration = duration_cast<milliseconds>(end - start).count();
+		std::cout << duration << " milliseconds\n";
 	}
 
 	~BTTester() override
@@ -126,10 +151,6 @@ public:
 		{
 			delete num;
 		}
-
-		//m_bts.processPostOrder([](T* item) {
-		//	delete item;
-		//});
 	}
 };
 

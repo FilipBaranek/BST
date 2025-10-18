@@ -51,10 +51,10 @@
     <ClInclude Include="BTTester.h">
       <Filter>Header Files\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="LinkedListTester.h">
+    <ClInclude Include="Tester.h">
       <Filter>Header Files\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Tester.h">
+    <ClInclude Include="MapTester.h">
       <Filter>Header Files\Tests</Filter>
     </ClInclude>
   </ItemGroup>
@@ -65,7 +65,7 @@
     <ClCompile Include="Number.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LinkedListTester.cpp">
+    <ClCompile Include="MapTester.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
   </ItemGroup>
