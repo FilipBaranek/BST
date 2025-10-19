@@ -6,7 +6,7 @@ MapTester::MapTester(const char* name)
 	m_randomData.reserve(RANDOM_DATA_COUNT);
 	for (int i = 1; i <= RANDOM_DATA_COUNT; ++i)
 	{
-		m_randomData.push_back(i);
+		m_randomData.push_back(new Number(i));
 	}
 	std::shuffle(m_randomData.begin(), m_randomData.end(), m_g);
 	std::cout << "Data generated\n";
@@ -18,25 +18,36 @@ void MapTester::testInsertion()
 	auto start = high_resolution_clock::now();
 	for (auto& number : m_randomData)
 	{
-		m_structure[number] = number;
+		m_structure[number->getData()] = number;
 	}
 	auto end = high_resolution_clock::now();
-	auto duration = duration_cast<seconds>(end - start).count();
-	std::cout << duration << " seconds\n";
+	auto duration = duration_cast<milliseconds>(end - start).count();
+	std::cout << duration << " milliseconds\n";
 }
 
 void MapTester::testRemoval()
 {
 	std::shuffle(m_randomData.begin(), m_randomData.begin() + REMOVE_DATA_COUNT, m_g);
+	
+	int startIndex = m_randomData.size() - REMOVE_DATA_COUNT;
+	int endIndex = m_randomData.size();
+	
 	std::cout << "REMOVAL\n";
 	auto start = high_resolution_clock::now();
-	for (int i{}; i < REMOVE_DATA_COUNT; ++i)
+	for (int i = startIndex; i < endIndex; ++i)
 	{
-		m_structure.erase(m_randomData[i]);
+		m_structure.erase(m_randomData[i]->getData());
 	}
 	auto end = high_resolution_clock::now();
-	auto duration = duration_cast<seconds>(end - start).count();
-	std::cout << duration << " seconds\n";
+	auto duration = duration_cast<milliseconds>(end - start).count();
+	std::cout << duration << " milliseconds\n";
+
+	for (int i{}; i < REMOVE_DATA_COUNT; ++i)
+	{
+		Number* data = m_randomData[m_randomData.size() - 1];
+		m_randomData.pop_back();
+		delete data;
+	}
 }
 
 void MapTester::testPointSearch()
@@ -46,11 +57,11 @@ void MapTester::testPointSearch()
 	auto start = high_resolution_clock::now();
 	for (int i{}; i < SEARCH_DATA_COUNT; ++i)
 	{
-		m_structure.find(m_randomData[i]);
+		m_structure.find(m_randomData[i]->getData());
 	}
 	auto end = high_resolution_clock::now();
-	auto duration = duration_cast<seconds>(end - start).count();
-	std::cout << duration << " seconds\n";
+	auto duration = duration_cast<nanoseconds>(end - start).count();
+	std::cout << duration << " nanoseconds\n";
 }
 
 void MapTester::generateInterval(int& minKey, int& maxKey)
@@ -88,8 +99,8 @@ void MapTester::testIntervalSearch()
 		}
 	}
 	auto end = high_resolution_clock::now();
-	auto duration = duration_cast<milliseconds>(end - start).count();
-	std::cout << duration << " milliseconds\n";
+	auto duration = duration_cast<nanoseconds>(end - start).count();
+	std::cout << duration << " nanoseconds\n";
 }
 
 void MapTester::testFindMinKey()
@@ -101,8 +112,8 @@ void MapTester::testFindMinKey()
 		m_structure.begin()->second;
 	}
 	auto end = high_resolution_clock::now();
-	auto duration = duration_cast<milliseconds>(end - start).count();
-	std::cout << duration << " milliseconds\n";
+	auto duration = duration_cast<nanoseconds>(end - start).count();
+	std::cout << duration << " nanoseconds\n";
 }
 
 void MapTester::testFindMaxKey()
@@ -114,6 +125,14 @@ void MapTester::testFindMaxKey()
 		m_structure.rbegin()->second;
 	}
 	auto end = high_resolution_clock::now();
-	auto duration = duration_cast<milliseconds>(end - start).count();
-	std::cout << duration << " milliseconds\n";
+	auto duration = duration_cast<nanoseconds>(end - start).count();
+	std::cout << duration << " nanoseconds\n";
+}
+
+MapTester::~MapTester()
+{
+	for (auto& num : m_randomData)
+	{
+		delete num;
+	}
 }

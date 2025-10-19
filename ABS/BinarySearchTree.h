@@ -137,11 +137,7 @@ protected:
 		while (true)
 		{
 			int cmp = currentNode->getData()->compare(data);
-			if (cmp == 0)
-			{
-				return nullptr;
-			}
-			else if (cmp == -1)
+			if (cmp == -1)
 			{
 				++depth;
 				if (currentNode->leftChild() == nullptr)
@@ -152,7 +148,7 @@ protected:
 				}
 				currentNode = currentNode->leftChild();
 			}
-			else
+			else if (cmp == 1)
 			{
 				++depth;
 				if (currentNode->rightChild() == nullptr)
@@ -162,6 +158,10 @@ protected:
 					break;
 				}
 				currentNode = currentNode->rightChild();
+			}
+			else
+			{
+				return nullptr;
 			}
 		}
 
@@ -204,7 +204,7 @@ protected:
 		}
 		else if (childCount == 1)
 		{
-			BSTNode<T>* child = currentNode->leftChild() != nullptr ? currentNode->leftChild() : currentNode->rightChild(); //Might be intentionaly nullptr if has no child
+			BSTNode<T>* child = currentNode->leftChild() != nullptr ? currentNode->leftChild() : currentNode->rightChild();
 			if (ancestor == nullptr)
 			{
 				m_root = child;
@@ -444,6 +444,7 @@ public:
 		});
 
 		m_root = nullptr;
+		m_size = 0;
 		m_depth = 0;
 	}
 	

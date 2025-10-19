@@ -85,8 +85,7 @@ private:
 				AVLNode<T>* parent = static_cast<AVLNode<T>*>(current->getAncestor());
 				if (current->balanceFactor() < -1)
 				{
-					AVLNode<T>* right = static_cast<AVLNode<T>*>(current->rightChild());
-					if (right == nullptr)
+					if (current->rightChild() == nullptr)
 					{
 						current = parent;
 						continue;
@@ -103,8 +102,7 @@ private:
 				}
 				else if (current->balanceFactor() > 1)
 				{
-					AVLNode<T>* left = static_cast<AVLNode<T>*>(current->leftChild());
-					if (left == nullptr)
+					if (static_cast<AVLNode<T>*>(current->leftChild()) == nullptr)
 					{
 						current = parent;
 						continue;
@@ -148,7 +146,7 @@ public:
 		return rd.m_data;
 	}
 
-	unsigned int depth()
+	unsigned int depth() override
 	{
 		if (this->m_root == nullptr)
 		{

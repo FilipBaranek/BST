@@ -1,17 +1,21 @@
 #pragma once
-#include <map>
 #include <vector>
+#include <map>
 #include "Tester.h"
 #include "Number.h"
+#include "BinarySearchTree.h"
+#include "AVLTree.h"
 
-class MapTester : public Tester
+
+class CommonTester : public Tester
 {
 private:
 	std::vector<Number*> m_randomData;
-	std::map<int, Number*> m_structure;
+	BinarySearchTree<Number*> m_bst;
+	AVLTree<Number*> m_at;
 
 public:
-	MapTester(const char* name);
+	CommonTester(const char* name);
 	void testInsertion() override;
 	void testRemoval() override;
 	void testPointSearch() override;
@@ -19,5 +23,5 @@ public:
 	void testFindMinKey() override;
 	void testFindMaxKey() override;
 	void generateInterval(int& minKey, int& maxKey);
-	~MapTester() override;
+	~CommonTester() override;
 };

@@ -40,8 +40,8 @@ public:
 			m_bts.insert(num);
 		}
 		auto end = high_resolution_clock::now();
-		auto duration = duration_cast<seconds>(end - start).count();
-		std::cout << duration << " seconds\n";
+		auto duration = duration_cast<milliseconds>(end - start).count();
+		std::cout << duration << " milliseconds\n";
 	}
 
 	void testRemoval() override
@@ -58,8 +58,8 @@ public:
 			m_bts.remove(m_randomData[i]);
 		}
 		auto end = high_resolution_clock::now();
-		auto duration = duration_cast<seconds>(end - start).count();
-		std::cout << duration << " seconds\n";
+		auto duration = duration_cast<milliseconds>(end - start).count();
+		std::cout << duration << " milliseconds\n";
 
 		for (int i{}; i < REMOVE_DATA_COUNT; ++i)
 		{
@@ -80,8 +80,8 @@ public:
 			m_bts.find(m_randomData[i]);
 		}
 		auto end = high_resolution_clock::now();
-		auto duration = duration_cast<seconds>(end - start).count();
-		std::cout << duration << " seconds\n";
+		auto duration = duration_cast<milliseconds>(end - start).count();
+		std::cout << duration << " milliseconds\n";
 	}
 
 	void generateInterval(int& minKey, int& maxKey)
@@ -114,8 +114,8 @@ public:
 			m_bts.find(keyPair.first, keyPair.second, interval);
 		}
 		auto end = high_resolution_clock::now();
-		auto duration = duration_cast<seconds>(end - start).count();
-		std::cout << duration << " seconds\n";
+		auto duration = duration_cast<milliseconds>(end - start).count();
+		std::cout << duration << " milliseconds\n";
 
 		for (const auto& keyPair : keys)
 		{

@@ -6,10 +6,26 @@
 #include "AVLTree.h"
 #include "Number.h"
 #include "MapTester.h"
+#include "CommonTester.h"
 
 
+void runCommonTests()
+{
+	CommonTester ct("Common tester");
+	ct.testInsertion();
+	std::cout << "\n";
+	ct.testRemoval();
+	std::cout << "\n";
+	ct.testPointSearch();
+	std::cout << "\n";
+	ct.testIntervalSearch();
+	std::cout << "\n";
+	ct.testFindMaxKey();
+	std::cout << "\n";
+	ct.testFindMinKey();
+}
 
-void runBTTester(bool dataInOrder = false)
+void runTests(bool dataInOrder = false)
 {
 	BinarySearchTree<Number*> bt;
 	AVLTree<Number*> at;
@@ -35,27 +51,19 @@ void runBTTester(bool dataInOrder = false)
 	}
 }
 
-void testOrderedData()
-{
-	runBTTester(true);
-}
-
-void testRandomData()
-{
-	runBTTester();
-}
-
 int main()
 {
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	srand(time(nullptr));
 
 	std::cout << "TESTING RANDOM DATA\n";
-	testRandomData();
+	runCommonTests();
+	//runTests();
 
 	//{
 	//	std::cout << "TESTING RANDOM DATA\n";
-	//	testRandomData();
+	//	runTests();
+	//	runCommonTests();
 	//}
 
 	return 0;

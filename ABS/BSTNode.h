@@ -22,22 +22,22 @@ public:
 		m_rightChild = nullptr;
 	}
 
-	void setData(T data)
+	inline void setData(T data)
 	{
 		m_data = data;
 	}
 
-	void setAncestor(BSTNode* ancestor)
+	inline void setAncestor(BSTNode* ancestor)
 	{
 		m_ancestor = ancestor;
 	}
 
-	void setRightChild(BSTNode* rightChild)
+	inline void setRightChild(BSTNode* rightChild)
 	{
 		m_rightChild = rightChild;
 	}
 
-	void setLeftChild(BSTNode* leftChild)
+	inline void setLeftChild(BSTNode* leftChild)
 	{
 		m_leftChild = leftChild;
 	}
@@ -58,25 +58,25 @@ public:
 		return count;
 	}
 
-	T& getData()
+	inline T getData()
 	{
 		return m_data;
 	}
 
-	BSTNode*& getAncestor()
+	inline BSTNode*& getAncestor()
 	{
 		return m_ancestor;
 	}
 
-	BSTNode*& leftChild()
+	inline BSTNode*& leftChild()
 	{
 		return m_leftChild;
 	}
 
-	BSTNode*& rightChild()
+	inline BSTNode*& rightChild()
 	{
 		return m_rightChild;
 	}
 
-	~BSTNode() = default;
+	inline ~BSTNode() = default;
 };

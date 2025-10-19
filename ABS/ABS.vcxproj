@@ -103,7 +103,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,6 +129,7 @@
     <ClInclude Include="AVLNode.h" />
     <ClInclude Include="AVLTree.h" />
     <ClInclude Include="BinarySearchTree.h" />
+    <ClInclude Include="CommonTester.h" />
     <ClInclude Include="IComparable.h" />
     <ClInclude Include="BSTNode.h" />
     <ClInclude Include="MapTester.h" />
@@ -137,6 +138,7 @@
     <ClInclude Include="Tester.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CommonTester.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapTester.cpp" />
     <ClCompile Include="Number.cpp" />

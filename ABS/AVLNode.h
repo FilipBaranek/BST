@@ -28,20 +28,20 @@ public:
 		m_balanceFactor = leftHeight - rightHeight;
 	}
 
-	bool isBalanced() const
+	inline bool isBalanced() const
 	{
 		return m_balanceFactor >= -1 && m_balanceFactor <= 1;
 	}
 
-	int balanceFactor() const
+	inline int balanceFactor() const
 	{
 		return m_balanceFactor;
 	}
 
-	int height() const
+	inline int height() const
 	{
 		return m_height;
 	}
 
-	~AVLNode() = default;
+	inline ~AVLNode() = default;
 };
