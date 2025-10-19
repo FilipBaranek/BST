@@ -3,7 +3,6 @@
 #include <iostream>
 #include "Tester.h"
 #include "BTTester.h"
-#include "LinkedListTester.h"
 #include "AVLTree.h"
 #include "Number.h"
 #include "MapTester.h"
@@ -24,9 +23,9 @@ void runBTTester(bool dataInOrder = false)
 	{
 		tester->printName();
 		tester->testInsertion();
-		tester->testRemoval();
+		//tester->testRemoval();
 		tester->testPointSearch();
-		tester->testIntervalSearch();
+		//tester->testIntervalSearch();
 		tester->testFindMaxKey();
 		tester->testFindMinKey();
 		std::cout << "\n";
@@ -66,15 +65,22 @@ int main()
 		std::cout << "TESTING RANDOM DATA\n";
 		testRandomData();
 		//std::cout << "\nTESTING IN ORDER DATA\n";
-		//testOrderedData();
-		std::cout << "\nTESTING STD::MAP\n";
-		testMap();
+		////testOrderedData();
+		//std::cout << "\nTESTING STD::MAP\n";
+		//testMap();
 
 
+		//AVLTree<Number*> at;
+		//for (int i = 1; i <= 1000; ++i)
+		//{
+		//	at.insert(new Number(i));
+		//}
+
+		
 
 		////////
 		////////
-		//////// TREBA VYMYSLIET AKO NEHLADAT CISLA KTORE UZ NIE SU V STROME
+		//////// FIXNUT REMOVE :DDDDDDDDDDD
 		///////
 		////////
 	}

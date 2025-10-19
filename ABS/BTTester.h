@@ -46,11 +46,14 @@ public:
 
 	void testRemoval() override
 	{
-		std::shuffle(m_randomData.begin(), m_randomData.end(), m_g);
+		std::shuffle(m_randomData.end() - REMOVE_DATA_COUNT - 1, m_randomData.end() - 1, m_g);
+
+		int startIndex = m_randomData.size() - REMOVE_DATA_COUNT - 1;
+		int endIndex = m_randomData.size();
 
 		std::cout << "REMOVAL\n";
 		auto start = high_resolution_clock::now();
-		for (int i = 0; i < REMOVE_DATA_COUNT; ++i)
+		for (int i = startIndex; i < endIndex; ++i)
 		{
 			m_bts.remove(m_randomData[i]);
 		}
@@ -58,9 +61,11 @@ public:
 		auto duration = duration_cast<seconds>(end - start).count();
 		std::cout << duration << " seconds\n";
 
-		for (auto it = m_randomData.begin(); it != m_randomData.begin() + REMOVE_DATA_COUNT; ++it)
+		auto it = m_randomData.begin();
+		for (int i = startIndex; i < endIndex; ++i)
 		{
-			delete *it;
+			//delete* it;
+			it = m_randomData.erase(it);
 		}
 	}
 
