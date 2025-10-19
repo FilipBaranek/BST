@@ -14,6 +14,7 @@ protected:
 	static constexpr unsigned int SEARCH_DATA_COUNT = 5000000;
 	static constexpr unsigned int SEARCH_INTERVAL_COUNT = 1000000;
 	static constexpr unsigned int SEARCH_INTERVAL = 500;
+	static constexpr unsigned int SEARCH_INTERVAL_MAX_EXTENSION = 200;
 	static constexpr unsigned int KEY_SEARCH_COUNT = 2000000;
 	const char* m_name;
 	std::random_device m_rd;

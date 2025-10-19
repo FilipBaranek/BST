@@ -313,14 +313,22 @@ public:
 		}
 	}
 
-	T findMinKey()
+	T findMinKey(T& key = nullptr)
 	{
-		return findMinKeyNode(m_root)->getData();
+		if (key == nullptr)
+		{
+			return findMinKeyNode(m_root)->getData();
+		}
+		return findMinKeyNode(findNode(key))->getData();
 	}
 
-	T findMaxKey()
+	T findMaxKey(T& key = nullptr)
 	{
-		return findMaxKeyNode(m_root)->getData();
+		if (key == nullptr)
+		{
+			return findMaxKeyNode(m_root)->getData();
+		}
+		return findMaxKeyNode(findNode(key))->getData();
 	}
 
 	virtual T remove(T& key)

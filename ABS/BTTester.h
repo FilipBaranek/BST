@@ -46,9 +46,9 @@ public:
 
 	void testRemoval() override
 	{
-		std::shuffle(m_randomData.end() - REMOVE_DATA_COUNT - 1, m_randomData.end() - 1, m_g);
+		std::shuffle(m_randomData.begin(), m_randomData.end(), m_g);
 
-		int startIndex = m_randomData.size() - REMOVE_DATA_COUNT - 1;
+		int startIndex = m_randomData.size() - REMOVE_DATA_COUNT;
 		int endIndex = m_randomData.size();
 
 		std::cout << "REMOVAL\n";
@@ -61,11 +61,11 @@ public:
 		auto duration = duration_cast<seconds>(end - start).count();
 		std::cout << duration << " seconds\n";
 
-		auto it = m_randomData.begin();
-		for (int i = startIndex; i < endIndex; ++i)
+		for (int i{}; i < REMOVE_DATA_COUNT; ++i)
 		{
-			//delete* it;
-			it = m_randomData.erase(it);
+			T* data = m_randomData[m_randomData.size() - 1];
+			m_randomData.pop_back();
+			delete data;
 		}
 	}
 
@@ -91,7 +91,7 @@ public:
 		{
 			minKey = (rand() % m_randomData.size()) + 1;
 		}
-		maxKey = minKey + SEARCH_INTERVAL;
+		maxKey = minKey + SEARCH_INTERVAL + (rand() % SEARCH_INTERVAL_MAX_EXTENSION);
 	}
 
 	void testIntervalSearch() override
@@ -130,7 +130,7 @@ public:
 		auto start = high_resolution_clock::now();
 		for (int i{}; i < KEY_SEARCH_COUNT; ++i)
 		{
-			m_bts.findMinKey();
+			m_bts.findMinKey(m_randomData[rand() % m_randomData.size()]);
 		}
 		auto end = high_resolution_clock::now();
 		auto duration = duration_cast<milliseconds>(end - start).count();
@@ -143,7 +143,7 @@ public:
 		auto start = high_resolution_clock::now();
 		for (int i{}; i < KEY_SEARCH_COUNT; ++i)
 		{
-			m_bts.findMaxKey();
+			m_bts.findMaxKey(m_randomData[rand() % m_randomData.size()]);
 		}
 		auto end = high_resolution_clock::now();
 		auto duration = duration_cast<milliseconds>(end - start).count();

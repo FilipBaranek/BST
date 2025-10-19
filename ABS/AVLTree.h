@@ -93,12 +93,10 @@ private:
 					}
 					if (static_cast<AVLNode<T>*>(current->rightChild())->balanceFactor() <= 0)
 					{
-						// RR
 						rotateLeft(current);
 					}
 					else
 					{
-						// RL
 						rotateRight(static_cast<AVLNode<T>*>(current->rightChild()));
 						rotateLeft(current);
 					}
@@ -113,12 +111,10 @@ private:
 					}
 					if (static_cast<AVLNode<T>*>(current->leftChild())->balanceFactor() >= 0)
 					{
-						//LL
 						rotateRight(current);
 					}
 					else
 					{
-						//LR
 						rotateLeft(static_cast<AVLNode<T>*>(current->leftChild()));
 						rotateRight(current);
 					}
