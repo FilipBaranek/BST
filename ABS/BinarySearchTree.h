@@ -277,7 +277,17 @@ public:
 
 	T find(T& key)
 	{
-		return findNode(key)->getData();
+		if (key == nullptr)
+		{
+			return nullptr;
+		}
+
+		BSTNode<T>* value = findNode(key);
+		if (value == nullptr)
+		{
+			return nullptr;
+		}
+		return value->getData();
 	}
 
 	void find(T lowestKey, T highestKey, std::vector<T>& outputInterval)
@@ -286,49 +296,70 @@ public:
 		{
 			return;
 		}
-		
-		std::stack<BSTNode<T>*> stack;
-		stack.push(m_root);
 
-		while (!stack.empty())
+		/////////////////////////////////////////////////////
+		BSTNode<T>* current = m_root;
+		while (true)
 		{
-			BSTNode<T>* currentNode = stack.top();
-			stack.pop();
-
-			int cmpLowest = currentNode->getData()->compare(lowestKey);
-			int cmpHighest = currentNode->getData()->compare(highestKey);
-
-			if (cmpLowest == -1 && currentNode->leftChild() != nullptr)
+			while (current->leftChild() != nullptr && current->getData()->compare(lowestKey) > 0)
 			{
-				stack.push(currentNode->leftChild());
+				current = current->leftChild();
 			}
-			if (cmpLowest != -1 && cmpHighest != 1)
+			outputInterval.push_back(current->getData());
+
+			if (current->rightChild() != nullptr)
 			{
-				outputInterval.push_back(currentNode->getData());
+				current = current->rightChild();
 			}
-			if (cmpHighest == 1 && currentNode->rightChild() != nullptr)
+			else
 			{
-				stack.push(currentNode->rightChild());
+				current = current->getAncestor();
+			}
+
+			if (current->getData()->compare(highestKey) == 0)
+			{
+				outputInterval.push_back(current->getData());
+				return;
 			}
 		}
 	}
 
-	T findMinKey(T& key = nullptr)
+	T findMinKey(T key = nullptr)
 	{
 		if (key == nullptr)
 		{
+			if (m_root == nullptr)
+			{
+				return nullptr;
+			}
 			return findMinKeyNode(m_root)->getData();
 		}
-		return findMinKeyNode(findNode(key))->getData();
+
+		BSTNode<T>* node = findNode(key);
+		if (node == nullptr)
+		{
+			return nullptr;
+		}
+		return findMinKeyNode(node)->getData();
 	}
 
-	T findMaxKey(T& key = nullptr)
+	T findMaxKey(T key = nullptr)
 	{
 		if (key == nullptr)
 		{
+			if (m_root == nullptr)
+			{
+				return nullptr;
+			}
 			return findMaxKeyNode(m_root)->getData();
 		}
-		return findMaxKeyNode(findNode(key))->getData();
+
+		BSTNode<T>* node = findNode(key);
+		if (node == nullptr)
+		{
+			return nullptr;
+		}
+		return findMaxKeyNode(node)->getData();
 	}
 
 	virtual T remove(T& key)

@@ -1,0 +1,37 @@
+#pragma once
+#include <vector>
+#include <time.h>
+#include <iostream>
+#include "BinarySearchTree.h"
+#include "AVLTree.h"
+#include "Number.h"
+
+class FunctionalityTester
+{
+private:
+	static constexpr const unsigned int INSERT = 0;
+	static constexpr const unsigned int REMOVE = 1;
+	static constexpr const unsigned int FIND_POINT = 2;
+	static constexpr const unsigned int FIND_INTERVAL = 3;
+	static constexpr const unsigned int FIND_MIN_KEY = 4;
+	static constexpr const unsigned int FIND_MAX_KEY = 5;
+	static constexpr const unsigned int REPLICATIONS = 10000000;
+	static constexpr const unsigned int CHECKPOINT_INDEX = 100000;
+	static constexpr const unsigned int UPPER_BOUND_COUNT = 5000;
+	static constexpr const unsigned int VALUE_UPPER_BOUND = 500000;
+	std::vector<Number*> m_data;
+	BinarySearchTree<Number*> m_bst;
+	AVLTree<Number*> m_at;
+
+public:
+	FunctionalityTester() = default;
+	void insert();
+	void remove();
+	void find();
+	void findInterval();
+	void findMinKey();
+	void findMaxKey();
+	inline int generateOperation();
+	void runTests();
+	~FunctionalityTester();
+};

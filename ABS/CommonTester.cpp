@@ -1,9 +1,7 @@
 #include "CommonTester.h"
 
-CommonTester::CommonTester(const char* name)
+CommonTester::CommonTester()
 {
-	m_name = name;
-
 	for (int i = 1; i <= RANDOM_DATA_COUNT; ++i)
 	{
 		m_randomData.push_back(new Number(i));
@@ -34,6 +32,16 @@ void CommonTester::testInsertion()
 	auto endAT = high_resolution_clock::now();
 	auto durationAT = duration_cast<milliseconds>(endAT - startAT).count();
 	std::cout << durationAT << " milliseconds\n";
+
+	std::cout << "RB tree\n";
+	auto startRB = high_resolution_clock::now();
+	for (auto& num : m_randomData)
+	{
+		m_rb[num] = num->getData();
+	}
+	auto endRB = high_resolution_clock::now();
+	auto durationRB = duration_cast<milliseconds>(endRB - startRB).count();
+	std::cout << durationRB << " milliseconds\n";
 }
 
 void CommonTester::testRemoval()
@@ -62,7 +70,17 @@ void CommonTester::testRemoval()
 	}
 	auto endAT = high_resolution_clock::now();
 	auto durationAT = duration_cast<milliseconds>(endAT - startAT).count();
-	std::cout << duration << " milliseconds\n";
+	std::cout << durationAT << " milliseconds\n";
+
+	std::cout << "RB tree\n";
+	auto startRB = high_resolution_clock::now();
+	for (int i = startIndex; i < endIndex; ++i)
+	{
+		m_at.remove(m_randomData[i]);
+	}
+	auto endRB = high_resolution_clock::now();
+	auto durationRB = duration_cast<milliseconds>(endRB - startRB).count();
+	std::cout << durationRB << " milliseconds\n";
 
 	for (int i{}; i < REMOVE_DATA_COUNT; ++i)
 	{
@@ -95,7 +113,17 @@ void CommonTester::testPointSearch()
 	}
 	auto endAT = high_resolution_clock::now();
 	auto durationAT = duration_cast<milliseconds>(endAT - startAT).count();
-	std::cout << duration << " milliseconds\n";
+	std::cout << durationAT << " milliseconds\n";
+
+	std::cout << "RB tree\n";
+	auto startRB = high_resolution_clock::now();
+	for (int i{}; i < SEARCH_DATA_COUNT; ++i)
+	{
+		m_rb[m_randomData[i]];
+	}
+	auto endRB = high_resolution_clock::now();
+	auto durationRB = duration_cast<milliseconds>(endRB - startRB).count();
+	std::cout << durationRB << " milliseconds\n";
 }
 
 void CommonTester::generateInterval(int& minKey, int& maxKey)
@@ -140,7 +168,9 @@ void CommonTester::testIntervalSearch()
 	}
 	auto endAT = high_resolution_clock::now();
 	auto durationAT = duration_cast<milliseconds>(endAT - startAT).count();
-	std::cout << duration << " milliseconds\n";
+	std::cout << durationAT << " milliseconds\n";
+
+	//RB TEST TODO
 
 	for (const auto& keyPair : keys)
 	{
@@ -162,7 +192,6 @@ void CommonTester::testFindMinKey()
 	auto duration = duration_cast<milliseconds>(end - start).count();
 	std::cout << duration << " milliseconds\n";
 
-	std::cout << "SEARCH FOR MIN KEY\n";
 	std::cout << "AVL tree\n";
 	auto startAT = high_resolution_clock::now();
 	for (int i{}; i < KEY_SEARCH_COUNT; ++i)
@@ -172,6 +201,16 @@ void CommonTester::testFindMinKey()
 	auto endAT = high_resolution_clock::now();
 	auto durationAT = duration_cast<milliseconds>(endAT - startAT).count();
 	std::cout << durationAT << " milliseconds\n";
+
+	std::cout << "RB tree\n";
+	auto startRB = high_resolution_clock::now();
+	for (int i{}; i < KEY_SEARCH_COUNT; ++i)
+	{
+		m_rb.begin()->first;
+	}
+	auto endRB = high_resolution_clock::now();
+	auto durationRB = duration_cast<milliseconds>(endRB - startRB).count();
+	std::cout << durationRB << " milliseconds\n";
 }
 
 void CommonTester::testFindMaxKey()
@@ -187,7 +226,6 @@ void CommonTester::testFindMaxKey()
 	auto duration = duration_cast<milliseconds>(end - start).count();
 	std::cout << duration << " milliseconds\n";
 
-	std::cout << "SEARCH FOR MAX KEY\n";
 	std::cout << "AVL tree\n";
 	auto startAT = high_resolution_clock::now();
 	for (int i{}; i < KEY_SEARCH_COUNT; ++i)
@@ -197,6 +235,16 @@ void CommonTester::testFindMaxKey()
 	auto endAT = high_resolution_clock::now();
 	auto durationAT = duration_cast<milliseconds>(endAT - startAT).count();
 	std::cout << durationAT << " milliseconds\n";
+
+	std::cout << "RB tree\n";
+	auto startRB = high_resolution_clock::now();
+	for (int i{}; i < KEY_SEARCH_COUNT; ++i)
+	{
+		m_rb.rbegin();
+	}
+	auto endRB = high_resolution_clock::now();
+	auto durationRB = duration_cast<milliseconds>(endRB - startRB).count();
+	std::cout << durationRB << " milliseconds\n";
 }
 
 CommonTester::~CommonTester()

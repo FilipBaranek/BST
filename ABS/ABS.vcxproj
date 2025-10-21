@@ -130,17 +130,16 @@
     <ClInclude Include="AVLTree.h" />
     <ClInclude Include="BinarySearchTree.h" />
     <ClInclude Include="CommonTester.h" />
+    <ClInclude Include="FunctionalityTester.h" />
     <ClInclude Include="IComparable.h" />
     <ClInclude Include="BSTNode.h" />
-    <ClInclude Include="MapTester.h" />
     <ClInclude Include="Number.h" />
-    <ClInclude Include="BTTester.h" />
-    <ClInclude Include="Tester.h" />
+    <ClInclude Include="SpeedTester.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CommonTester.cpp" />
+    <ClCompile Include="FunctionalityTester.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MapTester.cpp" />
     <ClCompile Include="Number.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

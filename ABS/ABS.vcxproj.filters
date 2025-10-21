@@ -28,6 +28,9 @@
     <Filter Include="Source Files\Tests">
       <UniqueIdentifier>{0aefcb64-fe56-4bb3-a00b-f5bf5e70ea23}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Interfaces">
+      <UniqueIdentifier>{4c128f1c-9535-4254-89c1-b2bb47da68ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BinarySearchTree.h">
@@ -39,26 +42,23 @@
     <ClInclude Include="Number.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IComparable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AVLNode.h">
       <Filter>Header Files\Structures\AVL</Filter>
     </ClInclude>
     <ClInclude Include="AVLTree.h">
       <Filter>Header Files\Structures\AVL</Filter>
     </ClInclude>
-    <ClInclude Include="BTTester.h">
-      <Filter>Header Files\Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="Tester.h">
-      <Filter>Header Files\Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="MapTester.h">
+    <ClInclude Include="SpeedTester.h">
       <Filter>Header Files\Tests</Filter>
     </ClInclude>
     <ClInclude Include="CommonTester.h">
       <Filter>Header Files\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionalityTester.h">
+      <Filter>Header Files\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="IComparable.h">
+      <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -68,10 +68,10 @@
     <ClCompile Include="Number.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MapTester.cpp">
+    <ClCompile Include="CommonTester.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
-    <ClCompile Include="CommonTester.cpp">
+    <ClCompile Include="FunctionalityTester.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,21 +1,22 @@
 #pragma once
 #include <vector>
 #include <map>
-#include "Tester.h"
+#include "SpeedTester.h"
 #include "Number.h"
 #include "BinarySearchTree.h"
 #include "AVLTree.h"
 
 
-class CommonTester : public Tester
+class CommonTester : public SpeedTester
 {
 private:
 	std::vector<Number*> m_randomData;
+	std::map<Number*, int> m_rb;
 	BinarySearchTree<Number*> m_bst;
 	AVLTree<Number*> m_at;
 
 public:
-	CommonTester(const char* name);
+	CommonTester();
 	void testInsertion() override;
 	void testRemoval() override;
 	void testPointSearch() override;
