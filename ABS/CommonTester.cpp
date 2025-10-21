@@ -170,6 +170,22 @@ void CommonTester::testIntervalSearch()
 	auto durationAT = duration_cast<milliseconds>(endAT - startAT).count();
 	std::cout << durationAT << " milliseconds\n";
 
+	std::cout << "RB tree\n";
+	auto startRB = high_resolution_clock::now();
+	for (const auto& keyPair : keys)
+	{
+		auto itLow = m_rb.lower_bound(keyPair.first);
+		auto itHigh = m_rb.lower_bound(keyPair.second);
+
+		for (auto it = itLow; it != itHigh; ++it)
+		{
+			it->first;
+		}
+	}
+	auto endRB = high_resolution_clock::now();
+	auto durationRB = duration_cast<milliseconds>(endRB - startRB).count();
+	std::cout << durationRB << " milliseconds\n";
+
 	//RB TEST TODO
 
 	for (const auto& keyPair : keys)

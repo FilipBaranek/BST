@@ -28,7 +28,23 @@ void FunctionalityTester::find()
 
 void FunctionalityTester::findInterval()
 {
-	//TODO
+	int interval = m_data.size() / 4;
+	
+	if (interval > 0)
+	{
+		int min, max;
+		min = m_data.size() + 1;
+		while (min < m_data.size() - interval - 1)
+		{
+			min = rand() % m_data.size();
+		}
+		max = min + interval;
+
+		auto low = new Number(min);
+		auto high = new Number(max);
+		std::vector<Number*> output;
+		m_bst.find(low, high, output);
+	}
 }
 
 void FunctionalityTester::findMinKey()
@@ -103,7 +119,7 @@ void FunctionalityTester::runTests()
 				default:
 					if (m_data.size() > 0)
 					{
-						findInterval();
+						//findInterval();
 					}
 					break;
 			}
