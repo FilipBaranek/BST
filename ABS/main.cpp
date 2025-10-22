@@ -11,16 +11,16 @@ int main()
 	srand(time(nullptr));
 
 	{
-		//FunctionalityTester ft;
-		//ft.runTests();
+		FunctionalityTester ft;
+		ft.runTests();
 
-		CommonTester ct;
-		ct.testInsertion();
-		ct.testRemoval();
-		ct.testPointSearch();
-		//ct.testIntervalSearch();
-		ct.testFindMinKey();
-		ct.testFindMaxKey();
+		//CommonTester ct;
+		//ct.testInsertion();
+		//ct.testRemoval();
+		//ct.testPointSearch();
+		////ct.testIntervalSearch();
+		//ct.testFindMinKey();
+		//ct.testFindMaxKey();
 	}
 
 	return 0;

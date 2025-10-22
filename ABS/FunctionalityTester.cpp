@@ -1,29 +1,100 @@
 #include "FunctionalityTester.h"
 
 
+FunctionalityTester::FunctionalityTester()
+{
+	m_minimalKey = 999999999;
+	m_maximalKey = -1;
+}
+
 void FunctionalityTester::insert()
 {
 	auto number = new Number(rand() % VALUE_UPPER_BOUND);
-	m_data.push_back(number);
-	m_bst.insert(number);
-	m_at.insert(number);
+	bool duplicity = false;
+	if (std::find_if(m_data.begin(), m_data.end(), [number](Number* n) { return n->getData() == number->getData(); }) != m_data.end())
+	{
+		duplicity = true;
+	}
+	else
+	{
+		m_data.push_back(number);
+
+		if (number->getData() < m_minimalKey)
+		{
+			m_minimalKey = number->getData();
+		}
+		else if (number->getData() > m_maximalKey)
+		{
+			m_maximalKey = number->getData();
+		}
+	}
+	bool btInserted = m_bst.insert(number);
+	bool atInserted = m_at.insert(number);
+
+	auto bstFindNum = m_bst.find(number);
+	auto atFindNum = m_at.find(number);
+
+	if ((duplicity && (btInserted || atInserted)) || (!duplicity && (bstFindNum != number || atFindNum != number)))
+	{
+		throw std::runtime_error("Incorrect inserting");
+	}
+
+	if (duplicity)
+	{
+		delete number;
+	}
 }
 
 void FunctionalityTester::remove()
 {
 	int index = rand() % m_data.size();
+	int numValue = m_data[index]->getData();
 	std::swap(m_data[index], m_data.back());
 	m_bst.remove(m_data.back());
 	m_at.remove(m_data.back());
+
+	if (m_bst.find(m_data.back()) != nullptr || m_at.find(m_data.back()) != nullptr)
+	{
+		throw std::runtime_error("Incorrect removal");
+	}
+
 	delete m_data.back();
 	m_data.pop_back();
+
+	if (numValue == m_minimalKey)
+	{
+		m_minimalKey = 999999999;
+		for (int i{}; i < m_data.size(); ++i)
+		{
+			if (m_data[i]->getData() < m_minimalKey)
+			{
+				m_minimalKey = m_data[i]->getData();
+			}
+		}
+	}
+	if (numValue == m_maximalKey)
+	{
+		m_maximalKey = -1;
+		for (int i{}; i < m_data.size(); ++i)
+		{
+			if (m_data[i]->getData() > m_maximalKey)
+			{
+				m_maximalKey = m_data[i]->getData();
+			}
+		}
+	}
 }
 
 void FunctionalityTester::find()
 {
 	auto number = m_data[rand() % m_data.size()];
-	m_bst.find(number);
-	m_at.find(number);
+	Number* bstKey = m_bst.find(number);
+	Number* atKey = m_at.find(number);
+
+	if (bstKey != number || atKey != number)
+	{
+		throw std::runtime_error("Incorrect point search");
+	}
 }
 
 void FunctionalityTester::findInterval()
@@ -40,10 +111,30 @@ void FunctionalityTester::findInterval()
 		}
 		max = min + interval;
 
+		std::vector<Number*> numbersInInterval;
+		for (auto n : m_data)
+		{
+			if (n->getData() >= min && n->getData() <= max)
+			{
+				numbersInInterval.push_back(n);
+			}
+		}
+		std::sort(numbersInInterval.begin(), numbersInInterval.end());
+
 		auto low = new Number(min);
 		auto high = new Number(max);
 		std::vector<Number*> output;
 		m_bst.find(low, high, output);
+
+		for (int i{}; i < numbersInInterval.size(); ++i)
+		{
+			if (numbersInInterval[i] != output[i])
+			{
+				throw std::runtime_error("Incorrect interval search");
+			}
+		}
+		delete low;
+		delete high;
 	}
 }
 
@@ -51,14 +142,13 @@ void FunctionalityTester::findMinKey()
 {
 	if (m_data.size() > 0)
 	{
-		auto number = m_data[rand() % m_data.size()];
-		m_bst.findMinKey(number);
-		m_at.findMinKey(number);
-	}
-	else
-	{
-		m_bst.findMinKey();
-		m_at.findMinKey();
+		Number* bstMinKey = m_bst.findMinKey();
+		Number* atMinKey = m_at.findMinKey();
+
+		if (bstMinKey->getData() != m_minimalKey || atMinKey->getData() != m_minimalKey)
+		{
+			throw std::runtime_error("Incorrect minimal key search");
+		}
 	}
 }
 
@@ -66,14 +156,13 @@ void FunctionalityTester::findMaxKey()
 {
 	if (m_data.size() > 0)
 	{
-		auto number = m_data[rand() % m_data.size()];
-		m_bst.findMaxKey(number);
-		m_at.findMaxKey(number);
-	}
-	else
-	{
-		m_bst.findMaxKey();
-		m_at.findMaxKey();
+	 	Number* bstMaxKey = m_bst.findMaxKey();
+		Number* atMaxKey = m_at.findMaxKey();
+
+		if (bstMaxKey->getData() != m_maximalKey || atMaxKey->getData() != m_maximalKey)
+		{
+			throw std::runtime_error("Incorrect maximal key search");
+		}
 	}
 }
 
