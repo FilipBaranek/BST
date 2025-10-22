@@ -297,15 +297,22 @@ public:
 			return;
 		}
 
-		/////////////////////////////////////////////////////
-		BSTNode<T>* current = m_root;
-		while (true)
+		BSTNode<T>* current = findNode(lowestKey);
+		BSTNode<T>* maxKey = findMaxKeyNode(m_root);
+		BSTNode<T>* lastUnprocessed = nullptr;
+		while (current != nullptr)
 		{
-			while (current->leftChild() != nullptr && current->getData()->compare(lowestKey) > 0)
+			while (current != lastUnprocessed && current->leftChild() != nullptr && current->getData()->compare(lowestKey) < 0)
 			{
 				current = current->leftChild();
 			}
+
 			outputInterval.push_back(current->getData());
+
+			if (current->getData()->compare(highestKey) <= 0 || current == maxKey)
+			{
+				return;
+			}
 
 			if (current->rightChild() != nullptr)
 			{
@@ -313,13 +320,12 @@ public:
 			}
 			else
 			{
+				while (current->getAncestor() != nullptr && current == current->getAncestor()->rightChild())
+				{
+					current = current->getAncestor();
+				}
 				current = current->getAncestor();
-			}
-
-			if (current->getData()->compare(highestKey) == 0)
-			{
-				outputInterval.push_back(current->getData());
-				return;
+				lastUnprocessed = current;
 			}
 		}
 	}
