@@ -74,9 +74,14 @@ private:
 
 	void rebalance(AVLNode<T>* node, bool insert = false)
 	{
+		int beforeDeleteBalanceFactor;
 		AVLNode<T>* current = node;
 		while (current != nullptr)
 		{
+			if (!insert)
+			{
+				beforeDeleteBalanceFactor = current->balanceFactor();
+			}
 			current->updateBalanceFactor();
 
 			if (!current->isBalanced())
@@ -98,7 +103,7 @@ private:
 						rotateRight(static_cast<AVLNode<T>*>(current->rightChild()));
 						rotateLeft(current);
 					}
-					if (insert)
+					if (insert || (!insert && beforeDeleteBalanceFactor == 0 && (current->balanceFactor() == 1 || current->balanceFactor() == -1)))
 					{
 						return;
 					}
@@ -119,13 +124,17 @@ private:
 						rotateLeft(static_cast<AVLNode<T>*>(current->leftChild()));
 						rotateRight(current);
 					}
-					if (insert)
+					if (insert || (!insert && beforeDeleteBalanceFactor == 0 && (current->balanceFactor() == 1 || current->balanceFactor() == -1)))
 					{
 						return;
 					}
 				}
 				current = parent;
 				continue;
+			}
+			else if (insert && current != node && current->balanceFactor() == 0)
+			{
+				return;
 			}
 			current = static_cast<AVLNode<T>*>(current->getAncestor());
 		}
