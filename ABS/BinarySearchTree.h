@@ -361,7 +361,7 @@ public:
 		return m_size;
 	}
 
-	virtual unsigned int depth()
+	unsigned int depth()
 	{
 		return m_depth;
 	}

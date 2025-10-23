@@ -23,7 +23,7 @@ void FunctionalityTester::insert()
 		{
 			m_minimalKey = number->getData();
 		}
-		else if (number->getData() > m_maximalKey)
+		if (number->getData() > m_maximalKey)
 		{
 			m_maximalKey = number->getData();
 		}
@@ -34,7 +34,8 @@ void FunctionalityTester::insert()
 	auto bstFindNum = m_bst.find(number);
 	auto atFindNum = m_at.find(number);
 
-	if ((duplicity && (btInserted || atInserted)) || (!duplicity && (bstFindNum != number || atFindNum != number)))
+	if ((duplicity && (btInserted || atInserted)) || 
+		(!duplicity && (bstFindNum->getData() != number->getData() || atFindNum->getData() != number->getData())))
 	{
 		throw std::runtime_error("Incorrect inserting");
 	}
@@ -48,7 +49,6 @@ void FunctionalityTester::insert()
 void FunctionalityTester::remove()
 {
 	int index = rand() % m_data.size();
-	int numValue = m_data[index]->getData();
 	std::swap(m_data[index], m_data.back());
 	m_bst.remove(m_data.back());
 	m_at.remove(m_data.back());
@@ -61,26 +61,20 @@ void FunctionalityTester::remove()
 	delete m_data.back();
 	m_data.pop_back();
 
-	if (numValue == m_minimalKey)
+	m_minimalKey = 999999999;
+	for (int i{}; i < m_data.size(); ++i)
 	{
-		m_minimalKey = 999999999;
-		for (int i{}; i < m_data.size(); ++i)
+		if (m_data[i]->getData() < m_minimalKey)
 		{
-			if (m_data[i]->getData() < m_minimalKey)
-			{
-				m_minimalKey = m_data[i]->getData();
-			}
+			m_minimalKey = m_data[i]->getData();
 		}
 	}
-	if (numValue == m_maximalKey)
+	m_maximalKey = -1000;
+	for (int i{}; i < m_data.size(); ++i)
 	{
-		m_maximalKey = -1;
-		for (int i{}; i < m_data.size(); ++i)
+		if (m_data[i]->getData() > m_maximalKey)
 		{
-			if (m_data[i]->getData() > m_maximalKey)
-			{
-				m_maximalKey = m_data[i]->getData();
-			}
+			m_maximalKey = m_data[i]->getData();
 		}
 	}
 }
@@ -169,9 +163,14 @@ void FunctionalityTester::findMaxKey()
 	}
 }
 
+void FunctionalityTester::testAVL()
+{
+	m_at.testTree();
+}
+
 int FunctionalityTester::generateOperation()
 {
-	return rand() % 4;
+	return rand() % 5;
 }
 
 void FunctionalityTester::runTests()
@@ -180,14 +179,15 @@ void FunctionalityTester::runTests()
 
 	for (int i{}; i < REPLICATIONS; ++i)
 	{
-		std::cout << "OPERATION N." << i << "\n";
-		std::cout << "BINARY TREE SIZE: " << m_bst.size() << "\n";
-		std::cout << "AVL SIZE: " << m_at.size() << "\n";
 		if (i % CHECKPOINT_INDEX == 0)
 		{
 			std::cout << "OPERATION N." << i << "\n";
 			std::cout << "BINARY TREE SIZE: " << m_bst.size() << "\n";
 			std::cout << "AVL SIZE: " << m_at.size() << "\n";
+			if (m_data.size() == 0)
+			{
+				insert();
+			}
 			findMinKey();
 			findMaxKey();
 		}
@@ -211,10 +211,16 @@ void FunctionalityTester::runTests()
 					}
 					break;
 				case FIND_INTERVAL:
+					if (m_data.size() > 0)
+					{
+						//findInterval();
+					}
+					break;
+				case TEST_AVL:
 				default:
 					if (m_data.size() > 0)
 					{
-						findInterval();
+						testAVL();
 					}
 					break;
 			}

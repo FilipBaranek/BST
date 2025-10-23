@@ -72,10 +72,9 @@ private:
 		b->updateBalanceFactor();
 	}
 
-	void rebalance(AVLNode<T>* node)
+	void rebalance(AVLNode<T>* node, bool insert = false)
 	{
 		AVLNode<T>* current = node;
-
 		while (current != nullptr)
 		{
 			current->updateBalanceFactor();
@@ -99,6 +98,10 @@ private:
 						rotateRight(static_cast<AVLNode<T>*>(current->rightChild()));
 						rotateLeft(current);
 					}
+					if (insert)
+					{
+						return;
+					}
 				}
 				else if (current->balanceFactor() > 1)
 				{
@@ -116,12 +119,46 @@ private:
 						rotateLeft(static_cast<AVLNode<T>*>(current->leftChild()));
 						rotateRight(current);
 					}
+					if (insert)
+					{
+						return;
+					}
 				}
 				current = parent;
 				continue;
 			}
 			current = static_cast<AVLNode<T>*>(current->getAncestor());
 		}
+	}
+
+	int test(AVLNode<T>* node)
+	{
+		if (node == nullptr)
+		{
+			return 0;
+		}
+
+		int leftHeight = test(static_cast<AVLNode<T>*>(node->leftChild()));
+		int rightHeight = test(static_cast<AVLNode<T>*>(node->rightChild()));
+
+		int expectedBalance = leftHeight - rightHeight;
+		if (node->balanceFactor() != expectedBalance)
+		{
+			throw std::runtime_error("Balance factor doesn't match expected balance factor");
+		}
+
+		int expectedHeight = std::max(leftHeight, rightHeight) + 1;
+		if (node->height() != expectedHeight)
+		{
+			throw std::runtime_error("Height doesn't match expected height");
+		}
+
+		if (expectedBalance < -1 || expectedBalance > 1)
+		{
+			throw std::runtime_error("Node isn't properly balanced");
+		}
+
+		return expectedHeight;
 	}
 
 public:
@@ -133,7 +170,7 @@ public:
 			return false;
 		}
 
-		rebalance(insertedNode);
+		rebalance(insertedNode, true);
 		return true;
 	}
 
@@ -146,13 +183,8 @@ public:
 		return rd.m_data;
 	}
 
-	unsigned int depth() override
+	void testTree()
 	{
-		if (this->m_root == nullptr)
-		{
-			return 0;
-		}
-
-		return static_cast<AVLNode<T>*>(this->m_root)->height();
+		test(static_cast<AVLNode<T>*>(this->m_root));
 	}
 };
