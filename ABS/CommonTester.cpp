@@ -68,7 +68,7 @@ void CommonTester::testRemoval()
 		durationAT += duration_cast<nanoseconds>(endAT - startAT).count();
 		
 		auto startRB = high_resolution_clock::now();
-		m_at.remove(m_randomData[i]);
+		m_rb.erase(m_randomData[i]);
 		auto endRB = high_resolution_clock::now();
 		durationRB += duration_cast<nanoseconds>(endRB - startRB).count();
 	}

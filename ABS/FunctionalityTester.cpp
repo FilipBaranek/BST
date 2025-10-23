@@ -213,7 +213,7 @@ void FunctionalityTester::runTests()
 				case FIND_INTERVAL:
 					if (m_data.size() > 0)
 					{
-						//findInterval();
+						findInterval();
 					}
 					break;
 				case TEST_AVL:
