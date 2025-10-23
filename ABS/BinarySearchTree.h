@@ -79,6 +79,102 @@ private:
 		return currentNode;
 	}
 
+	BSTNode<T>* findIntervalMinKeyNode(T& key)
+	{
+		if (m_size == 1)
+		{
+			return m_root->getData()->compare(key) > 0 ? nullptr : m_root;
+		}
+
+		BSTNode<T>* currentNode = m_root;
+		while (true)
+		{
+			int cmp = currentNode->getData()->compare(key);
+
+			if (cmp == 0)
+			{
+				return currentNode;
+			}
+			else if (cmp == -1)
+			{
+				if (currentNode->leftChild() == nullptr)
+				{
+					return currentNode;
+				}
+				currentNode = currentNode->leftChild();
+			}
+			else if (cmp == 1)
+			{
+				if (currentNode->rightChild() == nullptr)
+				{
+					return currentNode->getAncestor();
+				}
+				currentNode = currentNode->rightChild();
+			}
+		}
+	}
+
+	BSTNode<T>* findIntervalMaxKeyNode(T& key)
+	{
+		if (m_size == 1)
+		{
+			return m_root->getData()->compare(key) < 0 ? nullptr : m_root;
+		}
+
+		BSTNode<T>* currentNode = m_root;
+		while (true)
+		{
+			int cmp = currentNode->getData()->compare(key);
+
+			if (cmp == 0)
+			{
+				return currentNode;
+			}
+			else if (cmp == -1)
+			{
+				if (currentNode->leftChild() == nullptr)
+				{
+					return currentNode->getAncestor();
+				}
+				currentNode = currentNode->leftChild();
+			}
+			else if (cmp == 1)
+			{
+				if (currentNode->rightChild() == nullptr)
+				{
+					return currentNode;
+				}
+				currentNode = currentNode->rightChild();
+			}
+		}
+	}
+
+	BSTNode<T>* inorderNext(BSTNode<T>* node, BSTNode<T>*& lastAncestor)
+	{
+		BSTNode<T>* current = node;
+
+		if (current->leftChild() != nullptr && current != lastAncestor)
+		{
+			current = findMinKeyNode(current);
+		}
+		else if (current->rightChild() != nullptr)
+		{
+			current = current->rightChild();
+			current = findMinKeyNode(current);
+		}
+		else
+		{
+			while (current->getAncestor() != nullptr && current == current->getAncestor()->rightChild())
+			{
+				current = current->getAncestor();
+			}
+			current = current->getAncestor();
+			lastAncestor = current;
+		}
+
+		return current;
+	}
+
 	void postOrderTraversal(std::function<void(BSTNode<T>*)> process)
 	{
 		if (m_root == nullptr)
@@ -292,41 +388,41 @@ public:
 
 	void find(T lowestKey, T highestKey, std::vector<T>& outputInterval)
 	{
-		if (m_root == nullptr)
+		if (m_root == nullptr || lowestKey->compare(highestKey) == -1)
+		{
+			return;
+		}
+		else if (lowestKey->compare(highestKey) == 0)
+		{
+			T output = find(lowestKey);
+			
+			if (output != nullptr)
+			{
+				outputInterval.push_back(output);
+			}
+			return;
+		}
+
+		BSTNode<T>* current = findIntervalMinKeyNode(lowestKey);
+		BSTNode<T>* intervalMax = findIntervalMaxKeyNode(highestKey);
+		BSTNode<T>* lastAncestor = nullptr;
+
+		if (current == nullptr || intervalMax == nullptr ||
+			intervalMax->getData()->compare(lowestKey) == 1 ||
+			current->getData()->compare(highestKey) == -1)
 		{
 			return;
 		}
 
-		BSTNode<T>* current = findNode(lowestKey);
-		BSTNode<T>* maxKey = findMaxKeyNode(m_root);
-		BSTNode<T>* lastUnprocessed = nullptr;
-		while (current != nullptr)
+		while (current != nullptr && current < intervalMax)
 		{
-			while (current != lastUnprocessed && current->leftChild() != nullptr && current->getData()->compare(lowestKey) < 0)
-			{
-				current = current->leftChild();
-			}
-
 			outputInterval.push_back(current->getData());
+			current = inorderNext(current, lastAncestor);
+		}
 
-			if (current->getData()->compare(highestKey) <= 0 || current == maxKey)
-			{
-				return;
-			}
-
-			if (current->rightChild() != nullptr)
-			{
-				current = current->rightChild();
-			}
-			else
-			{
-				while (current->getAncestor() != nullptr && current == current->getAncestor()->rightChild())
-				{
-					current = current->getAncestor();
-				}
-				current = current->getAncestor();
-				lastUnprocessed = current;
-			}
+		if (current != nullptr)
+		{
+			outputInterval.push_back(current->getData());
 		}
 	}
 

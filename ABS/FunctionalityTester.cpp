@@ -99,16 +99,12 @@ void FunctionalityTester::find()
 
 void FunctionalityTester::findInterval()
 {
-	int interval = m_data.size() / 4;
+	int interval = (rand() % MAX_INTERVAL) + 1;;
 	
-	if (interval > 0)
+	if (m_data.size() > 0)
 	{
 		int min, max;
-		min = m_data.size() + 1;
-		while (min < m_data.size() - interval - 1)
-		{
-			min = rand() % m_data.size();
-		}
+		min = rand() % VALUE_UPPER_BOUND;
 		max = min + interval;
 
 		std::vector<Number*> numbersInInterval;
@@ -119,16 +115,23 @@ void FunctionalityTester::findInterval()
 				numbersInInterval.push_back(n);
 			}
 		}
-		std::sort(numbersInInterval.begin(), numbersInInterval.end());
+		std::sort(numbersInInterval.begin(), numbersInInterval.end(), [](Number* a, Number* b) {
+			return a->getData() < b->getData();
+		});
 
 		auto low = new Number(min);
 		auto high = new Number(max);
 		std::vector<Number*> output;
 		m_bst.find(low, high, output);
 
+		if (numbersInInterval.size() != output.size())
+		{
+			throw std::runtime_error("Interval size doesn't match");
+		}
+
 		for (int i{}; i < numbersInInterval.size(); ++i)
 		{
-			if (numbersInInterval[i] != output[i])
+			if (numbersInInterval[i]->getData() != output[i]->getData())
 			{
 				throw std::runtime_error("Incorrect interval search");
 			}
@@ -177,6 +180,9 @@ void FunctionalityTester::runTests()
 
 	for (int i{}; i < REPLICATIONS; ++i)
 	{
+		std::cout << "OPERATION N." << i << "\n";
+		std::cout << "BINARY TREE SIZE: " << m_bst.size() << "\n";
+		std::cout << "AVL SIZE: " << m_at.size() << "\n";
 		if (i % CHECKPOINT_INDEX == 0)
 		{
 			std::cout << "OPERATION N." << i << "\n";
@@ -208,7 +214,7 @@ void FunctionalityTester::runTests()
 				default:
 					if (m_data.size() > 0)
 					{
-						//findInterval();
+						findInterval();
 					}
 					break;
 			}

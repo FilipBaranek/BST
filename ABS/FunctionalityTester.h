@@ -19,6 +19,7 @@ private:
 	static constexpr const unsigned int CHECKPOINT_INDEX = 100000;
 	static constexpr const unsigned int UPPER_BOUND_COUNT = 5000;
 	static constexpr const unsigned int VALUE_UPPER_BOUND = 500000;
+	static constexpr const unsigned int MAX_INTERVAL = 500;
 	int m_minimalKey;
 	int m_maximalKey;
 	std::vector<Number*> m_data;

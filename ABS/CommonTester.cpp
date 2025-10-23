@@ -12,36 +12,35 @@ CommonTester::CommonTester()
 
 void CommonTester::testInsertion()
 {
-	std::cout << "INSERTION\n";
-	std::cout << "Binary search tree\n";
-	auto start = high_resolution_clock::now();
+	std::cout << "\nINSERTION\n";
+	long long duration = 0;
+	long long durationAT = 0;
+	long long durationRB = 0;
+	
 	for (auto& num : m_randomData)
 	{
+		auto start = high_resolution_clock::now();
 		m_bst.insert(num);
-	}
-	auto end = high_resolution_clock::now();
-	auto duration = duration_cast<milliseconds>(end - start).count();
-	std::cout << duration << " milliseconds\n";
+		auto end = high_resolution_clock::now();
+		duration += duration_cast<nanoseconds>(end - start).count();
 
-	std::cout << "AVL tree\n";
-	auto startAT = high_resolution_clock::now();
-	for (auto& num : m_randomData)
-	{
+		auto startAT = high_resolution_clock::now();
 		m_at.insert(num);
-	}
-	auto endAT = high_resolution_clock::now();
-	auto durationAT = duration_cast<milliseconds>(endAT - startAT).count();
-	std::cout << durationAT << " milliseconds\n";
-
-	std::cout << "RB tree\n";
-	auto startRB = high_resolution_clock::now();
-	for (auto& num : m_randomData)
-	{
+		auto endAT = high_resolution_clock::now();
+		durationAT += duration_cast<nanoseconds>(endAT - startAT).count();
+	
+		auto startRB = high_resolution_clock::now();
 		m_rb[num] = num->getData();
+		auto endRB = high_resolution_clock::now();
+		durationRB += duration_cast<nanoseconds>(endRB - startRB).count();
 	}
-	auto endRB = high_resolution_clock::now();
-	auto durationRB = duration_cast<milliseconds>(endRB - startRB).count();
-	std::cout << durationRB << " milliseconds\n";
+
+	std::cout << "Binary search tree\n";
+	std::cout << duration / 1000000.0 << " milliseconds\n";
+	std::cout << "AVL tree\n";
+	std::cout << durationAT / 1000000.0 << " milliseconds\n";
+	std::cout << "RB tree\n";
+	std::cout << durationRB / 1000000.0 << " milliseconds\n";
 }
 
 void CommonTester::testRemoval()
@@ -51,36 +50,35 @@ void CommonTester::testRemoval()
 	int startIndex = m_randomData.size() - REMOVE_DATA_COUNT;
 	int endIndex = m_randomData.size();
 
-	std::cout << "REMOVAL\n";
-	std::cout << "Binary search tree\n";
-	auto start = high_resolution_clock::now();
+	std::cout << "\nREMOVAL\n";
+	long long duration = 0;
+	long long durationAT = 0;
+	long long durationRB = 0;
+
 	for (int i = startIndex; i < endIndex; ++i)
 	{
+		auto start = high_resolution_clock::now();
 		m_bst.remove(m_randomData[i]);
-	}
-	auto end = high_resolution_clock::now();
-	auto duration = duration_cast<milliseconds>(end - start).count();
-	std::cout << duration << " milliseconds\n";
+		auto end = high_resolution_clock::now();
+		duration += duration_cast<nanoseconds>(end - start).count();
 
+		auto startAT = high_resolution_clock::now();
+		m_at.remove(m_randomData[i]);
+		auto endAT = high_resolution_clock::now();
+		durationAT += duration_cast<nanoseconds>(endAT - startAT).count();
+		
+		auto startRB = high_resolution_clock::now();
+		m_at.remove(m_randomData[i]);
+		auto endRB = high_resolution_clock::now();
+		durationRB += duration_cast<nanoseconds>(endRB - startRB).count();
+	}
+
+	std::cout << "Binary search tree\n";
+	std::cout << duration / 1000000.0 << " milliseconds\n";
 	std::cout << "AVL tree\n";
-	auto startAT = high_resolution_clock::now();
-	for (int i = startIndex; i < endIndex; ++i)
-	{
-		m_at.remove(m_randomData[i]);
-	}
-	auto endAT = high_resolution_clock::now();
-	auto durationAT = duration_cast<milliseconds>(endAT - startAT).count();
-	std::cout << durationAT << " milliseconds\n";
-
+	std::cout << durationAT / 1000000.0 << " milliseconds\n";
 	std::cout << "RB tree\n";
-	auto startRB = high_resolution_clock::now();
-	for (int i = startIndex; i < endIndex; ++i)
-	{
-		m_at.remove(m_randomData[i]);
-	}
-	auto endRB = high_resolution_clock::now();
-	auto durationRB = duration_cast<milliseconds>(endRB - startRB).count();
-	std::cout << durationRB << " milliseconds\n";
+	std::cout << durationRB / 1000000.0 << " milliseconds\n";
 
 	for (int i{}; i < REMOVE_DATA_COUNT; ++i)
 	{
@@ -94,36 +92,35 @@ void CommonTester::testPointSearch()
 {
 	std::shuffle(m_randomData.begin(), m_randomData.end(), m_g);
 
-	std::cout << "POINT SEARCH\n";
-	std::cout << "Binary search tree\n";
-	auto start = high_resolution_clock::now();
+	std::cout << "\nPOINT SEARCH\n";
+	long long duration = 0;
+	long long durationAT = 0;
+	long long durationRB = 0;
+
 	for (int i{}; i < SEARCH_DATA_COUNT; ++i)
 	{
+		auto start = high_resolution_clock::now();
 		m_bst.find(m_randomData[i]);
-	}
-	auto end = high_resolution_clock::now();
-	auto duration = duration_cast<milliseconds>(end - start).count();
-	std::cout << duration << " milliseconds\n";
+		auto end = high_resolution_clock::now();
+		duration += duration_cast<nanoseconds>(end - start).count();
 
-	std::cout << "AVL tree\n";
-	auto startAT = high_resolution_clock::now();
-	for (int i{}; i < SEARCH_DATA_COUNT; ++i)
-	{
+		auto startAT = high_resolution_clock::now();
 		m_at.find(m_randomData[i]);
-	}
-	auto endAT = high_resolution_clock::now();
-	auto durationAT = duration_cast<milliseconds>(endAT - startAT).count();
-	std::cout << durationAT << " milliseconds\n";
+		auto endAT = high_resolution_clock::now();
+		durationAT += duration_cast<nanoseconds>(endAT - startAT).count();
 
-	std::cout << "RB tree\n";
-	auto startRB = high_resolution_clock::now();
-	for (int i{}; i < SEARCH_DATA_COUNT; ++i)
-	{
+		auto startRB = high_resolution_clock::now();
 		m_rb[m_randomData[i]];
+		auto endRB = high_resolution_clock::now();
+		durationRB += duration_cast<nanoseconds>(endRB - startRB).count();
 	}
-	auto endRB = high_resolution_clock::now();
-	auto durationRB = duration_cast<milliseconds>(endRB - startRB).count();
-	std::cout << durationRB << " milliseconds\n";
+
+	std::cout << "Binary search tree\n";
+	std::cout << duration / 1000000.0 << " milliseconds\n";
+	std::cout << "AVL tree\n";
+	std::cout << durationAT / 1000000.0 << " milliseconds\n";
+	std::cout << "RB tree\n";
+	std::cout << durationRB / 1000000.0 << " milliseconds\n";
 }
 
 void CommonTester::generateInterval(int& minKey, int& maxKey)
@@ -149,31 +146,24 @@ void CommonTester::testIntervalSearch()
 	std::vector<Number*> interval;
 	interval.reserve(m_randomData.size());
 
-	std::cout << "INTERVAL SEARCH\n";
-	std::cout << "Binary search tree\n";
-	auto start = high_resolution_clock::now();
+	std::cout << "\nINTERVAL SEARCH\n";
+	long long duration = 0;
+	long long durationAT = 0;
+	long long durationRB = 0;
+
 	for (const auto& keyPair : keys)
 	{
+		auto start = high_resolution_clock::now();
 		m_bst.find(keyPair.first, keyPair.second, interval);
-	}
-	auto end = high_resolution_clock::now();
-	auto duration = duration_cast<milliseconds>(end - start).count();
-	std::cout << duration << " milliseconds\n";
-
-	std::cout << "AVL tree\n";
-	auto startAT = high_resolution_clock::now();
-	for (const auto& keyPair : keys)
-	{
+		auto end = high_resolution_clock::now();
+		duration += duration_cast<nanoseconds>(end - start).count();
+		
+		auto startAT = high_resolution_clock::now();
 		m_at.find(keyPair.first, keyPair.second, interval);
-	}
-	auto endAT = high_resolution_clock::now();
-	auto durationAT = duration_cast<milliseconds>(endAT - startAT).count();
-	std::cout << durationAT << " milliseconds\n";
+		auto endAT = high_resolution_clock::now();
+		durationAT += duration_cast<nanoseconds>(endAT - startAT).count();
 
-	std::cout << "RB tree\n";
-	auto startRB = high_resolution_clock::now();
-	for (const auto& keyPair : keys)
-	{
+		auto startRB = high_resolution_clock::now();
 		auto itLow = m_rb.lower_bound(keyPair.first);
 		auto itHigh = m_rb.lower_bound(keyPair.second);
 
@@ -181,12 +171,16 @@ void CommonTester::testIntervalSearch()
 		{
 			it->first;
 		}
+		auto endRB = high_resolution_clock::now();
+		durationRB += duration_cast<nanoseconds>(endRB - startRB).count();
 	}
-	auto endRB = high_resolution_clock::now();
-	auto durationRB = duration_cast<milliseconds>(endRB - startRB).count();
-	std::cout << durationRB << " milliseconds\n";
 
-	//RB TEST TODO
+	std::cout << "Binary search tree\n";
+	std::cout << duration / 1000000.0 << " milliseconds\n";
+	std::cout << "AVL tree\n";
+	std::cout << durationAT / 1000000.0 << " milliseconds\n";
+	std::cout << "RB tree\n";
+	std::cout << durationRB / 1000000.0 << " milliseconds\n";
 
 	for (const auto& keyPair : keys)
 	{
@@ -197,70 +191,68 @@ void CommonTester::testIntervalSearch()
 
 void CommonTester::testFindMinKey()
 {
-	std::cout << "SEARCH FOR MIN KEY\n";
-	std::cout << "Binary search tree\n";
-	auto start = high_resolution_clock::now();
+	std::cout << "\nSEARCH FOR MIN KEY\n";
+	long long duration = 0;
+	long long durationAT = 0;
+	long long durationRB = 0;
+
 	for (int i{}; i < KEY_SEARCH_COUNT; ++i)
 	{
+		auto start = high_resolution_clock::now();
 		m_bst.findMinKey(m_randomData[rand() % m_randomData.size()]);
-	}
-	auto end = high_resolution_clock::now();
-	auto duration = duration_cast<milliseconds>(end - start).count();
-	std::cout << duration << " milliseconds\n";
+		auto end = high_resolution_clock::now();
+		duration += duration_cast<nanoseconds>(end - start).count();
 
-	std::cout << "AVL tree\n";
-	auto startAT = high_resolution_clock::now();
-	for (int i{}; i < KEY_SEARCH_COUNT; ++i)
-	{
+		auto startAT = high_resolution_clock::now();
 		m_at.findMinKey(m_randomData[rand() % m_randomData.size()]);
-	}
-	auto endAT = high_resolution_clock::now();
-	auto durationAT = duration_cast<milliseconds>(endAT - startAT).count();
-	std::cout << durationAT << " milliseconds\n";
+		auto endAT = high_resolution_clock::now();
+		durationAT += duration_cast<nanoseconds>(endAT - startAT).count();
 
-	std::cout << "RB tree\n";
-	auto startRB = high_resolution_clock::now();
-	for (int i{}; i < KEY_SEARCH_COUNT; ++i)
-	{
+		auto startRB = high_resolution_clock::now();
 		m_rb.begin()->first;
+		auto endRB = high_resolution_clock::now();
+		durationRB += duration_cast<nanoseconds>(endRB - startRB).count();
 	}
-	auto endRB = high_resolution_clock::now();
-	auto durationRB = duration_cast<milliseconds>(endRB - startRB).count();
-	std::cout << durationRB << " milliseconds\n";
+
+	std::cout << "Binary search tree\n";
+	std::cout << duration / 1000000.0 << " milliseconds\n";
+	std::cout << "AVL tree\n";
+	std::cout << durationAT / 1000000.0 << " milliseconds\n";
+	std::cout << "RB tree\n";
+	std::cout << durationRB / 1000000.0 << " milliseconds\n";
 }
 
 void CommonTester::testFindMaxKey()
 {
-	std::cout << "SEARCH FOR MAX KEY\n";
-	std::cout << "Binary search tree\n";
-	auto start = high_resolution_clock::now();
+	std::cout << "\nSEARCH FOR MAX KEY\n";
+	long long duration = 0;
+	long long durationAT = 0;
+	long long durationRB = 0;
+
 	for (int i{}; i < KEY_SEARCH_COUNT; ++i)
 	{
+		auto start = high_resolution_clock::now();
 		m_bst.findMaxKey(m_randomData[rand() % m_randomData.size()]);
-	}
-	auto end = high_resolution_clock::now();
-	auto duration = duration_cast<milliseconds>(end - start).count();
-	std::cout << duration << " milliseconds\n";
+		auto end = high_resolution_clock::now();
+		duration += duration_cast<nanoseconds>(end - start).count();
 
-	std::cout << "AVL tree\n";
-	auto startAT = high_resolution_clock::now();
-	for (int i{}; i < KEY_SEARCH_COUNT; ++i)
-	{
+		auto startAT = high_resolution_clock::now();
 		m_at.findMaxKey(m_randomData[rand() % m_randomData.size()]);
-	}
-	auto endAT = high_resolution_clock::now();
-	auto durationAT = duration_cast<milliseconds>(endAT - startAT).count();
-	std::cout << durationAT << " milliseconds\n";
+		auto endAT = high_resolution_clock::now();
+		durationAT += duration_cast<nanoseconds>(endAT - startAT).count();
 
-	std::cout << "RB tree\n";
-	auto startRB = high_resolution_clock::now();
-	for (int i{}; i < KEY_SEARCH_COUNT; ++i)
-	{
-		m_rb.rbegin();
+		auto startRB = high_resolution_clock::now();
+		m_rb.rbegin()->first;
+		auto endRB = high_resolution_clock::now();
+		durationRB += duration_cast<nanoseconds>(endRB - startRB).count();
 	}
-	auto endRB = high_resolution_clock::now();
-	auto durationRB = duration_cast<milliseconds>(endRB - startRB).count();
-	std::cout << durationRB << " milliseconds\n";
+
+	std::cout << "Binary search tree\n";
+	std::cout << duration / 1000000.0 << " milliseconds\n";
+	std::cout << "AVL tree\n";
+	std::cout << durationAT / 1000000.0 << " milliseconds\n";
+	std::cout << "RB tree\n";
+	std::cout << durationRB / 1000000.0 << " milliseconds\n";
 }
 
 CommonTester::~CommonTester()
