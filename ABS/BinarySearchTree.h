@@ -87,6 +87,7 @@ private:
 		}
 
 		BSTNode<T>* currentNode = m_root;
+		BSTNode<T>* minFound = m_root;
 		while (true)
 		{
 			int cmp = currentNode->getData()->compare(key);
@@ -101,12 +102,17 @@ private:
 				{
 					return currentNode;
 				}
+				minFound = currentNode;
 				currentNode = currentNode->leftChild();
 			}
 			else if (cmp == 1)
 			{
 				if (currentNode->rightChild() == nullptr)
 				{
+					if (currentNode->getData()->compare(minFound->getData()) == 1)
+					{
+						return minFound;
+					}
 					return currentNode->getAncestor();
 				}
 				currentNode = currentNode->rightChild();
@@ -122,6 +128,7 @@ private:
 		}
 
 		BSTNode<T>* currentNode = m_root;
+		BSTNode<T>* maxFound = m_root;
 		while (true)
 		{
 			int cmp = currentNode->getData()->compare(key);
@@ -134,6 +141,10 @@ private:
 			{
 				if (currentNode->leftChild() == nullptr)
 				{
+					if (currentNode->getData()->compare(maxFound->getData()) == -1)
+					{
+						return maxFound;
+					}
 					return currentNode->getAncestor();
 				}
 				currentNode = currentNode->leftChild();
@@ -144,6 +155,7 @@ private:
 				{
 					return currentNode;
 				}
+				maxFound = currentNode;
 				currentNode = currentNode->rightChild();
 			}
 		}
@@ -405,16 +417,17 @@ public:
 
 		BSTNode<T>* current = findIntervalMinKeyNode(lowestKey);
 		BSTNode<T>* intervalMax = findIntervalMaxKeyNode(highestKey);
-		BSTNode<T>* lastAncestor = nullptr;
+		BSTNode<T>* lastAncestor = current != nullptr && current->leftChild() != nullptr ? current : nullptr;
 
-		if (current == nullptr || intervalMax == nullptr ||
-			intervalMax->getData()->compare(lowestKey) == 1 ||
-			current->getData()->compare(highestKey) == -1)
+		if (current == nullptr || intervalMax == nullptr ||intervalMax->getData()->compare(lowestKey) == 1 ||
+			current->getData()->compare(highestKey) == -1 || ((current->rightChild() == intervalMax ||
+			intervalMax->leftChild() == current || intervalMax->rightChild() == current) && 
+			current->getData()->compare(lowestKey) == 1 && intervalMax->getData()->compare(highestKey) == -1))
 		{
 			return;
 		}
 
-		while (current != nullptr && current < intervalMax)
+		while (current != nullptr && current->getData()->compare(intervalMax->getData()) > 0)
 		{
 			outputInterval.push_back(current->getData());
 			current = inorderNext(current, lastAncestor);

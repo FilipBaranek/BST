@@ -93,7 +93,7 @@ void FunctionalityTester::find()
 
 void FunctionalityTester::findInterval()
 {
-	int interval = (rand() % MAX_INTERVAL) + 1;;
+	int interval = (rand() % MAX_INTERVAL) + 1;
 	
 	if (m_data.size() > 0)
 	{
@@ -115,17 +115,19 @@ void FunctionalityTester::findInterval()
 
 		auto low = new Number(min);
 		auto high = new Number(max);
-		std::vector<Number*> output;
-		m_bst.find(low, high, output);
+		std::vector<Number*> btOutput;
+		std::vector<Number*> atOutput;
+		m_bst.find(low, high, btOutput);
+		m_at.find(low, high, atOutput);
 
-		if (numbersInInterval.size() != output.size())
+		if (numbersInInterval.size() != btOutput.size() || numbersInInterval.size() != atOutput.size())
 		{
 			throw std::runtime_error("Interval size doesn't match");
 		}
 
 		for (int i{}; i < numbersInInterval.size(); ++i)
 		{
-			if (numbersInInterval[i]->getData() != output[i]->getData())
+			if (numbersInInterval[i]->getData() != btOutput[i]->getData() || numbersInInterval[i]->getData() != atOutput[i]->getData())
 			{
 				throw std::runtime_error("Incorrect interval search");
 			}

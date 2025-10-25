@@ -24,12 +24,15 @@ int main()
 		//ct.testFindMaxKey();
 
 		//BinarySearchTree<Number*> bt;
-		//bt.insert(new Number(10));
-		//bt.insert(new Number(20));
+		//bt.insert(new Number(31139));
+		//bt.insert(new Number(10913));
+		//bt.insert(new Number(1243));
+		//bt.insert(new Number(20599));
+		//bt.insert(new Number(11166));
 
 		//std::vector<Number*> output;
-		//auto low = new Number(10);
-		//auto high = new Number(19);
+		//auto low = new Number(10877);
+		//auto high = new Number(11281);
 
 		//bt.find(low, high, output);
 
