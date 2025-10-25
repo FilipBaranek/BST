@@ -51,9 +51,6 @@
     <ClInclude Include="SpeedTester.h">
       <Filter>Header Files\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="CommonTester.h">
-      <Filter>Header Files\Tests</Filter>
-    </ClInclude>
     <ClInclude Include="FunctionalityTester.h">
       <Filter>Header Files\Tests</Filter>
     </ClInclude>
@@ -68,7 +65,7 @@
     <ClCompile Include="Number.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CommonTester.cpp">
+    <ClCompile Include="SpeedTester.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
     <ClCompile Include="FunctionalityTester.cpp">

@@ -1,6 +1,6 @@
-#include "CommonTester.h"
+#include "SpeedTester.h"
 
-CommonTester::CommonTester()
+SpeedTester::SpeedTester()
 {
 	for (int i = 1; i <= RANDOM_DATA_COUNT; ++i)
 	{
@@ -10,7 +10,7 @@ CommonTester::CommonTester()
 	std::cout << "Data generated\n";
 }
 
-void CommonTester::testInsertion()
+void SpeedTester::testInsertion()
 {
 	std::cout << "\nINSERTION\n";
 	long long duration = 0;
@@ -43,7 +43,7 @@ void CommonTester::testInsertion()
 	std::cout << durationRB / 1000000.0 << " milliseconds\n";
 }
 
-void CommonTester::testRemoval()
+void SpeedTester::testRemoval()
 {
 	std::shuffle(m_randomData.begin(), m_randomData.end(), m_g);
 
@@ -88,7 +88,7 @@ void CommonTester::testRemoval()
 	}
 }
 
-void CommonTester::testPointSearch()
+void SpeedTester::testPointSearch()
 {
 	std::shuffle(m_randomData.begin(), m_randomData.end(), m_g);
 
@@ -123,28 +123,25 @@ void CommonTester::testPointSearch()
 	std::cout << durationRB / 1000000.0 << " milliseconds\n";
 }
 
-void CommonTester::generateInterval(int& minKey, int& maxKey)
-{
-	minKey = -1;
-	while (minKey <= 0 || minKey >= m_randomData.size() - SEARCH_INTERVAL)
-	{
-		minKey = (rand() % m_randomData.size()) + 1;
-	}
-	maxKey = minKey + SEARCH_INTERVAL + (rand() % SEARCH_INTERVAL_MAX_EXTENSION);
-}
-
-void CommonTester::testIntervalSearch()
+void SpeedTester::testIntervalSearch()
 {
 	std::map<Number*, Number*> keys;
-	int min, max;
 	for (int i{}; i < SEARCH_INTERVAL_COUNT; ++i)
 	{
-		generateInterval(min, max);
+		int intervalWidth = SEARCH_INTERVAL + (rand() % SEARCH_INTERVAL_MAX_EXTENSION);
+		int min, max;
+		min = RANDOM_DATA_COUNT;
+		while (min > RANDOM_DATA_COUNT - intervalWidth)
+		{
+			min = rand() % (RANDOM_DATA_COUNT + 1);
+		}
+		max = min + intervalWidth;
+
 		keys[new Number(min)] = new Number(max);
 	}
 
 	std::vector<Number*> interval;
-	interval.reserve(m_randomData.size());
+	interval.reserve(SEARCH_INTERVAL + SEARCH_INTERVAL_MAX_EXTENSION + 1);
 
 	std::cout << "\nINTERVAL SEARCH\n";
 	long long duration = 0;
@@ -157,22 +154,24 @@ void CommonTester::testIntervalSearch()
 		m_bst.find(keyPair.first, keyPair.second, interval);
 		auto end = high_resolution_clock::now();
 		duration += duration_cast<nanoseconds>(end - start).count();
-		
+		interval.clear();
+
 		auto startAT = high_resolution_clock::now();
 		m_at.find(keyPair.first, keyPair.second, interval);
 		auto endAT = high_resolution_clock::now();
 		durationAT += duration_cast<nanoseconds>(endAT - startAT).count();
+		interval.clear();
 
 		auto startRB = high_resolution_clock::now();
 		auto itLow = m_rb.lower_bound(keyPair.first);
-		auto itHigh = m_rb.lower_bound(keyPair.second);
-
+		auto itHigh = m_rb.upper_bound(keyPair.second);
 		for (auto it = itLow; it != itHigh; ++it)
 		{
-			it->first;
+			interval.push_back(it->first);
 		}
 		auto endRB = high_resolution_clock::now();
 		durationRB += duration_cast<nanoseconds>(endRB - startRB).count();
+		interval.clear();
 	}
 
 	std::cout << "Binary search tree\n";
@@ -189,7 +188,7 @@ void CommonTester::testIntervalSearch()
 	}
 }
 
-void CommonTester::testFindMinKey()
+void SpeedTester::testFindMinKey()
 {
 	std::cout << "\nSEARCH FOR MIN KEY\n";
 	long long duration = 0;
@@ -222,7 +221,7 @@ void CommonTester::testFindMinKey()
 	std::cout << durationRB / 1000000.0 << " milliseconds\n";
 }
 
-void CommonTester::testFindMaxKey()
+void SpeedTester::testFindMaxKey()
 {
 	std::cout << "\nSEARCH FOR MAX KEY\n";
 	long long duration = 0;
@@ -255,7 +254,7 @@ void CommonTester::testFindMaxKey()
 	std::cout << durationRB / 1000000.0 << " milliseconds\n";
 }
 
-CommonTester::~CommonTester()
+SpeedTester::~SpeedTester()
 {
 	for (auto& num : m_randomData)
 	{

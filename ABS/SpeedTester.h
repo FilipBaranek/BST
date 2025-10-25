@@ -1,14 +1,18 @@
 #pragma once
 #include <random>
-#include <algorithm>
+#include <vector>
 #include <chrono>
 #include <iostream>
+#include <map>
+#include "Number.h"
+#include "BinarySearchTree.h"
+#include "AVLTree.h"
 
 using namespace std::chrono;
 
 class SpeedTester
 {
-protected:
+private:
 	static constexpr const unsigned int RANDOM_DATA_COUNT = 10000000;
 	static constexpr const unsigned int REMOVE_DATA_COUNT = 2000000;
 	static constexpr const unsigned int SEARCH_DATA_COUNT = 5000000;
@@ -18,13 +22,18 @@ protected:
 	static constexpr const unsigned int KEY_SEARCH_COUNT = 2000000;
 	std::random_device m_rd;
 	std::mt19937 m_g{ m_rd() };
+	std::vector<Number*> m_randomData;
+	std::map<Number*, int, NumberRBComparator> m_rb;
+	BinarySearchTree<Number*> m_bst;
+	AVLTree<Number*> m_at;
 
 public:
-	virtual void testInsertion() = 0;
-	virtual void testRemoval() = 0;
-	virtual void testPointSearch() = 0;
-	virtual void testIntervalSearch() = 0;
-	virtual void testFindMinKey() = 0;
-	virtual void testFindMaxKey() = 0;
-	virtual ~SpeedTester() = default;
+	SpeedTester();
+	void testInsertion();
+	void testRemoval();
+	void testPointSearch();
+	void testIntervalSearch();
+	void testFindMinKey();
+	void testFindMaxKey();
+	~SpeedTester();
 };

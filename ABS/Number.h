@@ -14,3 +14,11 @@ public:
 	~Number() = default;
 };
 
+struct NumberRBComparator
+{
+	bool operator()(Number* a, Number* b) const
+	{
+		return a->getData() < b->getData();
+	}
+};
+
