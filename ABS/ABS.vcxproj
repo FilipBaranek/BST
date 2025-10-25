@@ -129,6 +129,8 @@
     <ClInclude Include="AVLNode.h" />
     <ClInclude Include="AVLTree.h" />
     <ClInclude Include="BinarySearchTree.h" />
+    <ClInclude Include="PCRTest.h" />
+    <ClInclude Include="Person.h" />
     <ClInclude Include="SpeedTester.h" />
     <ClInclude Include="FunctionalityTester.h" />
     <ClInclude Include="IComparable.h" />
@@ -136,6 +138,7 @@
     <ClInclude Include="Number.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Person.cpp" />
     <ClCompile Include="SpeedTester.cpp" />
     <ClCompile Include="FunctionalityTester.cpp" />
     <ClCompile Include="main.cpp" />

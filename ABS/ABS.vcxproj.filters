@@ -31,6 +31,24 @@
     <Filter Include="Header Files\Interfaces">
       <UniqueIdentifier>{4c128f1c-9535-4254-89c1-b2bb47da68ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Tests\TestObjects">
+      <UniqueIdentifier>{66dd8868-d770-45ce-a00b-1eb4cca7758f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tests\TestObjects">
+      <UniqueIdentifier>{0a85b08d-8b7e-4437-be77-4feaa9ec7fa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PCRDatabase">
+      <UniqueIdentifier>{a38aea66-ff11-4cf5-8840-718d4cc05d39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PCRDatabase">
+      <UniqueIdentifier>{9862d67c-19d7-48bf-95af-7f2cd99f18d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PCRDatabase\Models">
+      <UniqueIdentifier>{fa5c1666-3170-4aa4-91bc-01b56c1f768e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PCRDatabase\Models">
+      <UniqueIdentifier>{9af01a2f-e14a-4691-a7b1-e1562406a5cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BinarySearchTree.h">
@@ -38,9 +56,6 @@
     </ClInclude>
     <ClInclude Include="BSTNode.h">
       <Filter>Header Files\Structures\BST</Filter>
-    </ClInclude>
-    <ClInclude Include="Number.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AVLNode.h">
       <Filter>Header Files\Structures\AVL</Filter>
@@ -57,12 +72,18 @@
     <ClInclude Include="IComparable.h">
       <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="Number.h">
+      <Filter>Header Files\Tests\TestObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Person.h">
+      <Filter>Header Files\PCRDatabase\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="PCRTest.h">
+      <Filter>Header Files\PCRDatabase\Models</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Number.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SpeedTester.cpp">
@@ -70,6 +91,12 @@
     </ClCompile>
     <ClCompile Include="FunctionalityTester.cpp">
       <Filter>Source Files\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Number.cpp">
+      <Filter>Source Files\Tests\TestObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Person.cpp">
+      <Filter>Source Files\PCRDatabase\Models</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

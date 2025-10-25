@@ -421,13 +421,12 @@ public:
 
 		if (current == nullptr || intervalMax == nullptr ||intervalMax->getData()->compare(lowestKey) == 1 ||
 			current->getData()->compare(highestKey) == -1 || ((current->rightChild() == intervalMax ||
-			intervalMax->leftChild() == current || intervalMax->rightChild() == current) && 
-			current->getData()->compare(lowestKey) == 1 && intervalMax->getData()->compare(highestKey) == -1))
+			intervalMax->leftChild() == current) && current->getData()->compare(lowestKey) == 1 && intervalMax->getData()->compare(highestKey) == -1))
 		{
 			return;
 		}
 
-		while (current != nullptr && current->getData()->compare(intervalMax->getData()) > 0)
+		while (current != nullptr && current != intervalMax)
 		{
 			outputInterval.push_back(current->getData());
 			current = inorderNext(current, lastAncestor);
