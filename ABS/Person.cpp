@@ -1,13 +1,11 @@
 #include "Person.h"
 
-Person::Person(std::string birthNumber, std::string firstName, std::string lastName, unsigned int birthDay, unsigned int birthMonth, unsigned int birthYear)
+Person::Person(std::string birthNumber, std::string firstName, std::string lastName, std::chrono::year_month_day birthDay)
 {
 	m_birthNumber = birthNumber;
 	m_firstName = firstName;
 	m_lastName = lastName;
 	m_birthDay = birthDay;
-	m_birthMonth = birthMonth;
-	m_birthYear = birthYear;
 }
 
 inline std::string Person::birthNumber()
@@ -25,17 +23,30 @@ inline std::string Person::lastName()
 	return m_lastName;
 }
 
-inline unsigned int Person::birthDay()
+inline std::chrono::year_month_day Person::birthDay()
 {
 	return m_birthDay;
 }
 
-inline unsigned int Person::birthMonth()
+inline void Person::print()
 {
-	return m_birthMonth;
+	std::cout << "[" << m_birthNumber << "] " << m_firstName << " " << m_lastName << " born " << m_birthDay << "\n";
 }
 
-inline unsigned int Person::birthYear()
+int Person::compare(IComparable* other) const
 {
-	return m_birthYear;
+	Person* otherPerson = static_cast<Person*>(other);
+
+	if (m_birthNumber < otherPerson->birthNumber())
+	{
+		return 1;
+	}
+	else if (m_birthNumber == otherPerson->birthNumber())
+	{
+		return 0;
+	}
+	else
+	{
+		return -1;
+	}
 }

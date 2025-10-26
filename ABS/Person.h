@@ -1,23 +1,24 @@
 #pragma once
 #include <string>
+#include <chrono>
+#include <iostream>
+#include "IComparable.h"
 
-class Person
+class Person : public IComparable
 {
 private:
 	std::string m_birthNumber;
 	std::string m_firstName;
 	std::string m_lastName;
-	unsigned int m_birthDay;
-	unsigned int m_birthMonth;
-	unsigned int m_birthYear;
+	std::chrono::year_month_day m_birthDay;
 
 public:
-	Person(std::string birthNumber, std::string firstName, std::string lastName, unsigned int birthDay, unsigned int birthMonth, unsigned int birthYear);
+	Person(std::string birthNumber, std::string firstName, std::string lastName, std::chrono::year_month_day birthDay);
 	inline std::string birthNumber();
 	inline std::string firstName();
 	inline std::string lastName();
-	inline unsigned int birthDay();
-	inline unsigned int birthMonth();
-	inline unsigned int birthYear();
+	inline std::chrono::year_month_day birthDay();
+	inline void print();
+	int compare(IComparable* other) const override;
 	~Person() = default;
 };

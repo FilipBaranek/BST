@@ -81,6 +81,9 @@
     <ClInclude Include="PCRTest.h">
       <Filter>Header Files\PCRDatabase\Models</Filter>
     </ClInclude>
+    <ClInclude Include="Database.h">
+      <Filter>Header Files\PCRDatabase</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -96,6 +99,9 @@
       <Filter>Source Files\Tests\TestObjects</Filter>
     </ClCompile>
     <ClCompile Include="Person.cpp">
+      <Filter>Source Files\PCRDatabase\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="PCRTest.cpp">
       <Filter>Source Files\PCRDatabase\Models</Filter>
     </ClCompile>
   </ItemGroup>
